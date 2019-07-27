@@ -321,7 +321,7 @@ public class PurePursuitController extends Command {
         leftDriveTrainVelocityPID.cancel();
         rightDriveTrainVelocityPID.cancel();
         odometry.cancel();
-        Robot.stopMotors.stopDriveTrainMotors();
+        RobotMap.drive.stopDriveTrainMotors();
     }
 
     // Called when another command which requires one or more of the same

@@ -7,15 +7,18 @@
 
 package frc.robot;
 
-import frc.robot.commands.humanInterface.ArcadeDrive;
+import frc.robot.commands.humanInterface.ArmInterface;
+import frc.robot.commands.humanInterface.DriveInterface;
 
 /**
  * Add your docs here.
  */
 public class CommandSuites {
-    public ArcadeDrive arcadeDrive;
+    public DriveInterface driveInterface;
+    public ArmInterface armInterface;
     public CommandSuites(){
-        arcadeDrive = new ArcadeDrive();
+        armInterface = new ArmInterface();
+        driveInterface = new DriveInterface();
     }
     public void startAutoCommands(){
 
@@ -24,7 +27,8 @@ public class CommandSuites {
 
     }
     public void startTeleopCommands(){
-        arcadeDrive.start();
+        armInterface.start();
+        driveInterface.start();
     }
     public void endTeleopCommands(){
 

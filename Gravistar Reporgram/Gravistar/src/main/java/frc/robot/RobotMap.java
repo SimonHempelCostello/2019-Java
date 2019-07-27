@@ -12,8 +12,13 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import frc.robot.sensors.ArmEncoder;
+import frc.robot.sensors.DriveEncoder;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -23,39 +28,48 @@ import frc.robot.subsystems.DriveTrain;
  * floating around.
  */
 public class RobotMap {
-  public static DoubleSolenoid shifters = new DoubleSolenoid(0, 7);
-  public static Value lowGear = DoubleSolenoid.Value.kForward;
-  public static Value highGear = DoubleSolenoid.Value.kReverse;
 
   public static AHRS navx = new AHRS(Port.kMXP);
-  
-	public static DoubleSolenoid intake = new DoubleSolenoid(2, 5);
-	public static Value intakeIn = DoubleSolenoid.Value.kForward;
-  public static Value intakeOut = DoubleSolenoid.Value.kReverse;
-  
-	public static DoubleSolenoid catapultRelease = new DoubleSolenoid(3, 4);
-	public static Value releaseClosed = DoubleSolenoid.Value.kForward;
-  public static Value releaseOpen = DoubleSolenoid.Value.kReverse;
-  
-  public static DoubleSolenoid catapult = new DoubleSolenoid(1, 6);
-	public static Value catapultResting = DoubleSolenoid.Value.kReverse;
-	public static Value catapultSet = DoubleSolenoid.Value.kForward;
 
-	public static AnalogInput pressureSensor = new AnalogInput(0);
+  public static DoubleSolenoid shifters = new DoubleSolenoid(0, 1);
+	public static DoubleSolenoid.Value lowGear = DoubleSolenoid.Value.kReverse;//TODO directions must be assigned
+  public static DoubleSolenoid.Value highGear = DoubleSolenoid.Value.kForward;//TODO directions mut be assinged
 
-	public static int leftMasterTalonID = 1;
-	public static int leftFollowerTalonID = 2;
+  public static DoubleSolenoid hatchPushOutPiston = new DoubleSolenoid(2,3);
+  public static DoubleSolenoid.Value hatchMechOut = DoubleSolenoid.Value.kForward;
+  public static DoubleSolenoid.Value hatchMechIn = DoubleSolenoid.Value.kReverse;
+  
+	public static DoubleSolenoid hatchGrabberPiston = new DoubleSolenoid(4,5);
+	public static DoubleSolenoid.Value hatchMechRelease = DoubleSolenoid.Value.kForward;
+  public static DoubleSolenoid.Value hatchMechGrab = DoubleSolenoid.Value.kReverse;
+  
+  public static PowerDistributionPanel pdp = new PowerDistributionPanel();
+
+  
 	public static int rightMasterTalonID = 3;
-	public static int rightFollowerTalonID = 4;
-	public static int intakeMotorID = 5;
-	public static int pincherTalonID = 6;
-	public static TalonSRX leftDriveLead = new TalonSRX(leftMasterTalonID); // blue encoder
-	public static TalonSRX leftDriveFollowerOne = new TalonSRX(leftFollowerTalonID); // yellow
-	public static TalonSRX rightDriveLead = new TalonSRX(rightMasterTalonID); // red
-	public static TalonSRX rightDriveFollowerOne = new TalonSRX(rightFollowerTalonID);// green encoder
-	public static TalonSRX intakeMotor = new TalonSRX(intakeMotorID);
-  public static TalonSRX pincher = new TalonSRX(pincherTalonID);
+  public static int leftMasterTalonID = 1;
 
+  public static int rightFollowerTalonID = 4;
+  public static int leftFollowerTalonID = 2;
+
+  public static int armMasterID = 5;
+  public static int armFollowerID = 6;
+  
+  public static int intakeMotorID = 7;
+  
+  public static TalonSRX leftDriveLead = new TalonSRX(leftMasterTalonID); // blue encoder
+  public static TalonSRX rightDriveLead = new TalonSRX(rightMasterTalonID); // red
+
+	public static TalonSRX leftDriveFollowerOne = new TalonSRX(leftFollowerTalonID); // yellow
+  public static TalonSRX rightDriveFollowerOne = new TalonSRX(rightFollowerTalonID);// green encoder
+  
+  public static TalonSRX armMaster = new TalonSRX(armMasterID);
+  public static TalonSRX armFollower = new TalonSRX(armFollowerID);
+
+	public static TalonSRX intakeMotor = new TalonSRX(intakeMotorID);
+  
+  public static Relay.Value lightRingOn = Relay.Value.kForward;
+  public static Relay.Value lightRingOff = Relay.Value.kReverse;
   
   public static TalonSRX driveMotors[] = {
     RobotMap.leftDriveLead,
@@ -71,19 +85,21 @@ public class RobotMap {
     RobotMap.leftDriveLead,
     RobotMap.rightDriveLead,
     RobotMap.intakeMotor,
-    RobotMap.pincher
+    RobotMap.armMaster
   };
   public static TalonSRX allMotors[] = {
     RobotMap.leftDriveLead,
     RobotMap.rightDriveLead,
     RobotMap.leftDriveFollowerOne,
     RobotMap.rightDriveFollowerOne,
-    RobotMap.intakeMotor,
-    RobotMap.pincher
+    RobotMap.armMaster,
+    RobotMap.armFollower,
+    RobotMap.intakeMotor
   };
 
   public static DriveTrain drive = new DriveTrain();
-
+  public static Arm arm = new Arm();
+  
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;

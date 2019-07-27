@@ -7,13 +7,15 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.controls.StopMotors;
-import frc.robot.commands.humanInterface.ArcadeDrive;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -23,7 +25,6 @@ import frc.robot.commands.humanInterface.ArcadeDrive;
  */
 public class Robot extends TimedRobot {
   public static OI m_oi;
-  public static StopMotors stopMotors;
   Command m_autonomousCommand;
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
@@ -35,7 +36,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     commandSuites = new CommandSuites();
-    stopMotors =new StopMotors();
     robotConfig = new RobotConfig();
     robotConfig.setStartingConfig();
     m_oi = new OI();
@@ -51,6 +51,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
+    SmartDashboard.putNumber("armSpinnyBoy1",RobotMap.arm.mainArmEncoder.getAngle());
   }
 
   /**
@@ -64,6 +66,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+
     Scheduler.getInstance().run();
   }
 
@@ -120,9 +123,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+
     Scheduler.getInstance().run();
   }
 
+  public void stopAllMotors(){
+    for(TalonSRX talon : RobotMap.allMotorLeads){
+        talon.set(ControlMode.PercentOutput, 0);
+    }
+  }
   /**
    * This function is called periodically during test mode.
    */

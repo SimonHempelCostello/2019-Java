@@ -15,22 +15,33 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 public class ButtonMap {
     public static OI oi = new OI();
     public static double getDriveThrottle(){
-        return -oi.xboxController.getRawAxis(1);
+        return -oi.xboxController0.getRawAxis(1);
     } 
     public static double getRotation(){
-        return -oi.xboxController.getRawAxis(4);
+        return oi.xboxController0.getRawAxis(4);
     }
     public static int getPOV(){
-        return oi.xboxController.getPOV();
+        return oi.xboxController0.getPOV();
     }
     public static boolean shiftUp(){
-        return oi.xboxController.getBumper(Hand.kLeft);
+        return oi.xboxController0.getBumper(Hand.kLeft);
     }
     public static boolean shiftDown(){
-        return oi.xboxController.getBumper(Hand.kRight);
+        return oi.xboxController0.getBumper(Hand.kRight);
     }
     public static boolean quickTurn(){
-        return oi.xboxController.getRawAxis(3)>0.5;
+        return oi.xboxController0.getRawAxis(3)>0.5;
     }
-
+    public static boolean armUp(){
+        return oi.xboxController1.getYButton();  
+    }
+    public static boolean armOuttake(){
+        return oi.xboxController1.getXButton();  
+    }
+    public static boolean armResting(){
+        return oi.xboxController1.getAButton();  
+    }
+    public static double armManualControlValue(){
+        return oi.xboxController1.getRawAxis(1);
+    }
 }
