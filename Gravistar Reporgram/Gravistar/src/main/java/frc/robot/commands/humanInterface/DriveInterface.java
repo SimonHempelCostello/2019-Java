@@ -34,13 +34,20 @@ public class DriveInterface extends Command {
 	@Override
 	protected void initialize() {
 		shouldFinish = false;
-		RobotConfig.setDriveMotorsCoast();
+		RobotConfig.setDriveMotorsBrake();
+		RobotMap.drive.initVelocityPIDs();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		RobotMap.drive.arcadeDrive();
+		if(ButtonMap.testVelocity()){
+			RobotMap.drive.setLeftSpeed(6);
+			RobotMap.drive.setRightSpeed(6);
+		}
+		else{
+			RobotMap.drive.arcadeDrive2();
+		}
 
 	}
 	public void forceEnd(){

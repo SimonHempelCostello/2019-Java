@@ -44,6 +44,8 @@ public class RobotMap {
   public static DoubleSolenoid.Value hatchMechGrab = DoubleSolenoid.Value.kReverse;
   
   public static PowerDistributionPanel pdp = new PowerDistributionPanel();
+  
+	public static Relay visionRelay1 = new Relay(0);
 
   
 	public static int rightMasterTalonID = 3;

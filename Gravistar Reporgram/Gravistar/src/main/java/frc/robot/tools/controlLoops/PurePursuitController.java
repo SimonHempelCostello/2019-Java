@@ -94,9 +94,10 @@ public class PurePursuitController extends Command {
         shouldEnd = false;
         leftDriveTrainVelocityPID.start();
         rightDriveTrainVelocityPID.start();
-        odometry.zero();
-        odometry.start();
+ 
         if(!usesOutsideOdometry){ 
+            odometry.zero();
+            odometry.start();
             if(startingX !=0 && startingY!=0){
                 odometry.setX(startingX);
                 odometry.setY(startingY);
@@ -151,10 +152,10 @@ public class PurePursuitController extends Command {
     private class PathRunnable implements Runnable{
         public void run(){
             if(shouldRunAlgorithm){
-            purePursuitAlgorithm();
+                purePursuitAlgorithm();
             }
             else{
-            pathNotifier.stop();
+                pathNotifier.stop();
             }
         }
     }

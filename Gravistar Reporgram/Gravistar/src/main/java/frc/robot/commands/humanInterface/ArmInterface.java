@@ -14,10 +14,15 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.ButtonMap;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
+import frc.robot.commands.controls.GrabHatch;
+import frc.robot.commands.controls.PlaceHatch;
+import frc.robot.commands.controls.GrabHatch;
 
 public class ArmInterface extends Command {
   private boolean shouldFinish;
   private double desiredAngle  = 105;
+  private GrabHatch grabHatch;
+  private PlaceHatch placeHatch;
   public ArmInterface() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -26,6 +31,8 @@ public class ArmInterface extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    grabHatch = new GrabHatch();
+    placeHatch = new PlaceHatch();
     shouldFinish = false;
   }
 
@@ -50,7 +57,28 @@ public class ArmInterface extends Command {
     else if(ButtonMap.armUp()){
       desiredAngle = RobotStats.armUpAngle;
     }
-    RobotMap.arm.setArmPostion(desiredAngle);
+    if(Math.abs(ButtonMap.armManualControlValue())>0.1){
+      RobotMap.arm.setArmPercentPower(ButtonMap.armManualControlValue()*0.5);
+      desiredAngle = RobotMap.arm.mainArmEncoder.getAngle();
+    }
+    else{
+      RobotMap.arm.setArmPostion(desiredAngle);
+    }
+    if(ButtonMap.releaseHatch()){
+      placeHatch.start();
+    }
+    else if(ButtonMap.grabHatch()){
+      grabHatch.start();
+    }
+    if(ButtonMap.outTakeBall()){
+      RobotMap.arm.outTakeBall();
+    }
+    else if(ButtonMap.inTakeBall()){
+      RobotMap.arm.inTakeBall();
+    }
+    else{
+      RobotMap.arm.intakeRest();
+    }
     
 
 

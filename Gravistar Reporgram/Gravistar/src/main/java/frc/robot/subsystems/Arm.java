@@ -8,11 +8,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
+import frc.robot.commands.controls.SwitchPiston;
 import frc.robot.sensors.ArmEncoder;
 
 /**
@@ -21,15 +23,26 @@ import frc.robot.sensors.ArmEncoder;
 public class Arm extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private double kp = 4;
-  private double ki = 0.001;
-  private double kd = 1;
-  private double kf = 0.45574;
-  private int acceleration = 1500;
-  private int velocity = 750;
+  private double kp = 2.7;
+  private double ki = 0.03;
+  private double kd = 30;
+  public SwitchPiston tenseHatchGrabber;
+  public SwitchPiston releaseHatchGrabber;
+  public SwitchPiston pushHatchMechOut;
+  public SwitchPiston pullHatchMechIn;
+  private double kf = 1.274;
+  private int acceleration = 1250;
+  private int velocity = 1250;
   
+  private double compensationFactor = 0.07;
   public static ArmEncoder mainArmEncoder = new ArmEncoder(RobotMap.armMaster);
+  public Arm(){
+    pushHatchMechOut = new SwitchPiston(RobotMap.hatchPushOutPiston, RobotMap.hatchMechOut);
+    tenseHatchGrabber = new SwitchPiston(RobotMap.hatchGrabberPiston, RobotMap.hatchMechGrab);
+    releaseHatchGrabber = new SwitchPiston(RobotMap.hatchGrabberPiston, RobotMap.hatchMechRelease);
+    pullHatchMechIn = new SwitchPiston(RobotMap.hatchPushOutPiston, RobotMap.hatchMechIn);
 
+  }
   @Override
   public void initDefaultCommand() {
   }
@@ -47,26 +60,39 @@ public class Arm extends Subsystem {
     RobotMap.armMaster.set(ControlMode.PercentOutput,value);
   }
   public void setArmPostion(double angle){
-    if(angle ==150&&RobotMap.arm.mainArmEncoder.getAngle()>145){
-      keepArmUp();
-    }
-    if(angle ==0&&RobotMap.arm.mainArmEncoder.getAngle()<5){
-      keepArmDown();
-    }
+    double compensationValue = compensationFactor*mainArmEncoder.getAngle();
     RobotMap.armMaster.set(ControlMode.MotionMagic, RobotMap.arm.mainArmEncoder.convertAngleToEncoderTics(angle));
-
-
     SmartDashboard.putNumber("error", RobotMap.armMaster.getClosedLoopError(0));
     SmartDashboard.putNumber("output", RobotMap.armMaster.getMotorOutputPercent());
     SmartDashboard.putNumber("desiredAnlge", RobotMap.armMaster.getClosedLoopTarget(0));
 
   }
- 
+  public void setHatchMechOut(){
+    pushHatchMechOut.start();
+  }
+  public void setHatchMechIn(){
+    pullHatchMechIn.start();
+  }
+  public void tenseHatchGrabbers(){
+    tenseHatchGrabber.start();
+  }
+  public void releaseHatchGrabbers(){
+    releaseHatchGrabber.start();
+  }
   public void keepArmUp(){
     setArmPercentPower(0.1);
   }
   public void keepArmDown(){
     setArmPercentPower(-0.1);
+  }
+  public void outTakeBall(){
+    RobotMap.intakeMotor.set(ControlMode.PercentOutput, 1.0);
+  }
+  public void inTakeBall(){
+    RobotMap.intakeMotor.set(ControlMode.PercentOutput, -1.0);
+  }
+  public void intakeRest(){
+    RobotMap.intakeMotor.set(ControlMode.PercentOutput, 0);
   }
 
 

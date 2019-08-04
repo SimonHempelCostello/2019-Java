@@ -25,6 +25,10 @@ public class RobotConfig {
         for(TalonSRX talon:RobotMap.allMotors){
             talon.configFactoryDefault();
         }
+        for(TalonSRX talon:RobotMap.allMotors){
+            talon.configVoltageCompSaturation(12.1);
+            talon.enableVoltageCompensation(true);
+        }
         RobotConfig.setAllMotorsBrake();
         RobotConfig.setDriveMotorsCoast();
         
@@ -52,7 +56,7 @@ public class RobotConfig {
         RobotMap.armMaster.setSelectedSensorPosition((int)RobotMap.arm.mainArmEncoder.convertAngleToEncoderTics(RobotStats.armUpAngle));
         RobotMap.armMaster.setSensorPhase(true);
         
-    	for(TalonSRX talon:RobotMap.allMotorLeads) {
+    	for(TalonSRX talon:RobotMap.allMotors) {
     		talon.configContinuousCurrentLimit(RobotStats.driveMotorContinuousCurrentHighGear);
     		talon.configPeakCurrentLimit(RobotStats.driveMotorPeakCurrentHighGear);
             talon.configPeakCurrentDuration(RobotStats.driveMotorPeakCurrentDurationHighGear);

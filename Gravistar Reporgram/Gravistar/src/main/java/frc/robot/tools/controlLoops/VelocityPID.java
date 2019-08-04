@@ -47,8 +47,6 @@ public class VelocityPID extends Command {
     talon.config_kI(profile, i, 0);
     talon.config_kD(profile, d, 0);
     talon.set(ControlMode.Velocity, driveEncoder.convertftpersToNativeUnitsper100ms(speed));
-    talon.configNominalOutputForward(0.08);
-    talon.configNominalOutputReverse(-0.08);
 
     finish = false;
   }

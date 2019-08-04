@@ -11,11 +11,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.ButtonMap;
 import frc.robot.RobotConfig;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
 import frc.robot.sensors.DriveEncoder;
+import frc.robot.tools.controlLoops.VelocityPID;
 
 /**
  * Add your docs here.
@@ -28,10 +30,16 @@ public class DriveTrain extends Subsystem {
 	private double throttel = 0;
 	private double povValue;
 	private double ratio = 0;
-  private double sensitivity;
+	private double sensitivity;
+	private double minTurnFactor = 0.4;
   public static DriveEncoder leftMainDrive = new DriveEncoder(RobotMap.leftDriveLead,RobotMap.leftDriveLead.getSelectedSensorPosition(0));
-  public static DriveEncoder rightMaindrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
-
+  public static DriveEncoder rightMainDrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
+	private double speed;
+  private double f = 0.332;
+  private double p = 0.25;
+  private double i = 0.0006;
+  private double d = 25.0;
+  private int profile = 0;
 
   @Override
   public void initDefaultCommand() {
@@ -41,37 +49,49 @@ public class DriveTrain extends Subsystem {
   public void setLowGear(){
     RobotMap.shifters.set(RobotMap.lowGear);
   }
+	public void initVelocityPIDs(){
+    RobotMap.leftDriveLead.selectProfileSlot(profile, 0);
+    RobotMap.leftDriveLead.config_kF(profile, f, 0);
+    RobotMap.leftDriveLead.config_kP(profile, p, 0);
+    RobotMap.leftDriveLead.config_kI(profile, i, 0);
+    RobotMap.leftDriveLead.config_kD(profile, d, 0);
+    RobotMap.leftDriveLead.set(ControlMode.Velocity, leftMainDrive.convertftpersToNativeUnitsper100ms(speed));
+    RobotMap.rightDriveLead.selectProfileSlot(profile, 0);
+    RobotMap.rightDriveLead.config_kF(profile, f, 0);
+    RobotMap.rightDriveLead.config_kP(profile, p, 0);
+    RobotMap.rightDriveLead.config_kI(profile, i, 0);
+    RobotMap.rightDriveLead.config_kD(profile, d, 0);
+    RobotMap.rightDriveLead.set(ControlMode.Velocity, rightMainDrive.convertftpersToNativeUnitsper100ms(speed));
 
+	}
   public void setHighGear(){
     RobotMap.shifters.set(RobotMap.highGear);
   }
-  public void arcadeDrive(){
-    double leftPower;
-    double rightPower;
-    throttel = ButtonMap.getDriveThrottle()*0.9; 
-		ratio = Math.abs(throttel);
+	public void arcadeDrive2(){
+		double leftPower;
+		double rightPower;
+		double differential;
+		
+		throttel = ButtonMap.getDriveThrottle(); 
+		if(throttel ==0){
+			throttel = 0.001;
+		}
+		ratio = Math.abs(1/throttel);
 		povValue = ButtonMap.getPOV();
 		turn = ButtonMap.getRotation();
-		if(Math.abs(throttel)>RobotStats.joyStickDeadZone){
-			leftPower = (throttel - (sensitivity*turn*ratio));
-			rightPower = (throttel + (sensitivity*turn*ratio));
-		}
-		else{
-			leftPower = (-turn)*sensitivity;
-			rightPower = (turn)*sensitivity; 
-		}
-		if(ButtonMap.quickTurn()) {
-			leftPower = throttel +(-turn);
-			rightPower= throttel +(turn);
-		}
+		differential = (turn*ratio*sensitivity) + Math.abs(minTurnFactor*turn);
+
+		leftPower = (throttel - (differential));
+		rightPower = (throttel + (differential));
+	
 		if(Math.abs(leftPower)>1) {
-			leftPower = (leftPower/Math.abs(leftPower));
-			rightPower = Math.abs(rightPower/leftPower)*(rightPower/Math.abs(rightPower));
+			rightPower = Math.abs(rightPower/leftPower)*Math.signum(rightPower);
+			leftPower = Math.signum(leftPower);
 		}
 		else if(Math.abs(rightPower)>1) {
-			rightPower = (rightPower/Math.abs(rightPower));
-			leftPower = Math.abs(leftPower/rightPower)*(leftPower/Math.abs(leftPower));
-    }
+			leftPower = Math.abs(leftPower/rightPower)*Math.signum(leftPower);
+			rightPower = Math.signum(rightPower);
+		}
     RobotMap.leftDriveLead.set(ControlMode.PercentOutput, leftPower);
     RobotMap.rightDriveLead.set(ControlMode.PercentOutput, rightPower);
 		if(ButtonMap.shiftDown()){
@@ -81,13 +101,26 @@ public class DriveTrain extends Subsystem {
 			setHighGear();
 		}
 		if(RobotMap.shifters.get() == RobotMap.highGear) {
-				sensitivity =2.25;
+				sensitivity =1;
 		}
 		else if(RobotMap.shifters.get() == RobotMap.lowGear) {
-				sensitivity =1.25;
+				sensitivity =1;
     }
-  }
+	}
+	public void autoHatchPickup(){
+		
+	}
+	public void setLeftSpeed(double speed){
+		SmartDashboard.putNumber("output", leftMainDrive.getVelocity());
+		SmartDashboard.putNumber("error", RobotMap.leftDriveLead.getClosedLoopError());
+		SmartDashboard.putNumber("target", RobotMap.leftDriveLead.getClosedLoopTarget());
+		SmartDashboard.putNumber("position", leftMainDrive.getDistance());
+		RobotMap.leftDriveLead.set(ControlMode.Velocity, leftMainDrive.convertftpersToNativeUnitsper100ms(speed));
+	}
+	public void setRightSpeed(double speed){
+		RobotMap.rightDriveLead.set(ControlMode.Velocity, rightMainDrive.convertftpersToNativeUnitsper100ms(speed));
 
+	}
   public void stopDriveTrainMotors(){
     for(TalonSRX talon : RobotMap.driveMotorLeads){
         talon.set(ControlMode.PercentOutput, 0);

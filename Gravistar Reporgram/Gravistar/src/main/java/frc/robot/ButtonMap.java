@@ -15,33 +15,49 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 public class ButtonMap {
     public static OI oi = new OI();
     public static double getDriveThrottle(){
-        return -oi.xboxController0.getRawAxis(1);
+        return -oi.driverController.getRawAxis(1);
     } 
     public static double getRotation(){
-        return oi.xboxController0.getRawAxis(4);
+        return oi.driverController.getRawAxis(4);
     }
     public static int getPOV(){
-        return oi.xboxController0.getPOV();
+        return oi.driverController.getPOV();
     }
     public static boolean shiftUp(){
-        return oi.xboxController0.getBumper(Hand.kLeft);
+        return oi.driverController.getBumper(Hand.kLeft);
     }
     public static boolean shiftDown(){
-        return oi.xboxController0.getBumper(Hand.kRight);
+        return oi.driverController.getBumper(Hand.kRight);
     }
     public static boolean quickTurn(){
-        return oi.xboxController0.getRawAxis(3)>0.5;
+        return oi.driverController.getRawAxis(3)>0.5;
+    }
+    public static boolean testVelocity(){
+        return oi.driverController.getXButton();
     }
     public static boolean armUp(){
-        return oi.xboxController1.getYButton();  
+        return oi.operatorController.getYButton();  
     }
     public static boolean armOuttake(){
-        return oi.xboxController1.getXButton();  
+        return oi.operatorController.getXButton();  
     }
     public static boolean armResting(){
-        return oi.xboxController1.getAButton();  
+        return oi.operatorController.getAButton();  
     }
     public static double armManualControlValue(){
-        return oi.xboxController1.getRawAxis(1);
+        return oi.operatorController.getRawAxis(1);
     }
+    public static boolean grabHatch(){
+        return oi.operatorController.getBumper(Hand.kLeft);
+    }
+    public static boolean releaseHatch(){
+        return oi.operatorController.getBumper(Hand.kRight);
+    }
+    public static boolean outTakeBall(){
+        return (oi.operatorController.getRawAxis(2)>0.5);
+    }
+    public static boolean inTakeBall(){
+        return (oi.operatorController.getRawAxis(3)>0.5);
+    }
+
 }
