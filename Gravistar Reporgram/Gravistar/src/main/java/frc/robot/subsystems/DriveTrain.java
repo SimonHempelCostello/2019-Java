@@ -36,9 +36,9 @@ public class DriveTrain extends Subsystem {
   public static DriveEncoder rightMainDrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
 	private double speed;
   private double f = 0.332;
-  private double p = 0.25;
-  private double i = 0.0006;
-  private double d = 25.0;
+  private double p = 0.75;
+  private double i = 0.00001;
+  private double d = 7.50;
   private int profile = 0;
 
   @Override
