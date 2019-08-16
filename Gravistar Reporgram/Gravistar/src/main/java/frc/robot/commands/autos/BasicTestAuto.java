@@ -8,12 +8,16 @@
 package frc.robot.commands.autos;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
+import frc.robot.tools.controlLoops.PurePursuitController;
+import frc.robot.tools.pathTools.PathList;
 
-public class BasicAuto extends CommandGroup {
+public class BasicTestAuto extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public BasicAuto() {
+  public BasicTestAuto() {
+    addSequential(new PurePursuitController(PathList.test1Path, 1.5, 5.0, 0.05, true));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

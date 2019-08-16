@@ -18,6 +18,7 @@ import frc.robot.RobotMap;
 import frc.robot.RobotStats;
 import frc.robot.sensors.DriveEncoder;
 import frc.robot.tools.controlLoops.VelocityPID;
+import frc.robot.tools.pathTools.Odometry;
 
 /**
  * Add your docs here.
@@ -39,13 +40,27 @@ public class DriveTrain extends Subsystem {
   private double p = 0.75;
   private double i = 0.00001;
   private double d = 7.50;
-  private int profile = 0;
+	private int profile = 0;
+	private Odometry autoOdometry;
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-  }
+	}
+	public void startAutoOdometry(){
+		autoOdometry = new Odometry(false);
+		autoOdometry.start();
+	};
+	public double getDriveTrainX(){
+		return autoOdometry.getX();
+	}
+	public double getDriveTrainY(){
+		return autoOdometry.getY();
+	}
+	public double getDriveTrainHeading(){
+		return autoOdometry.gettheta();
+	}
   public void setLowGear(){
     RobotMap.shifters.set(RobotMap.lowGear);
   }
@@ -67,7 +82,7 @@ public class DriveTrain extends Subsystem {
   public void setHighGear(){
     RobotMap.shifters.set(RobotMap.highGear);
   }
-	public void arcadeDrive2(){
+	public void arcadeDrive(){
 		double leftPower;
 		double rightPower;
 		double differential;

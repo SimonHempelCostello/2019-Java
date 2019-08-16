@@ -46,7 +46,7 @@ public class DriveInterface extends Command {
 			RobotMap.drive.setRightSpeed(6);
 		}
 		else{
-			RobotMap.drive.arcadeDrive2();
+			RobotMap.drive.arcadeDrive();
 		}
 
 	}

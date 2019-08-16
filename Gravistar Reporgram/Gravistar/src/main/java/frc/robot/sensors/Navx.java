@@ -20,6 +20,13 @@ public class Navx {
 		originalPitch = imu.getPitch();
 		originalRoll = imu.getRoll();
 	}
+	public Navx(AHRS navx, Double startAngle) {
+		imu = navx;
+		originalAngle = startAngle;
+		originalYaw = imu.getYaw();
+		originalPitch = imu.getPitch();
+		originalRoll = imu.getRoll();
+	}
 	public double currentAngle() {
 		return imu.getAngle()-originalAngle;	
 	}

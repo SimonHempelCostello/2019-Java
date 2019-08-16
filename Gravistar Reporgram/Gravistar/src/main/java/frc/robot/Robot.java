@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.tools.pathTools.Odometry;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,7 +29,6 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand;
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
-
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -37,10 +37,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     commandSuites = new CommandSuites();
     robotConfig = new RobotConfig();
+    RobotMap.drive.startAutoOdometry();
     robotConfig.setStartingConfig();
     m_oi = new OI();
   }
-
   /**
    * This function is called every robot packet, no matter the mode. Use
    * this for items like diagnostics that you want ran during disabled,
@@ -51,10 +51,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
-    SmartDashboard.putNumber("armSpinnyBoy1",RobotMap.arm.mainArmEncoder.getAngle());
+    //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
+    //SmartDashboard.putNumber("armSpinnyBoy1",RobotMap.arm.mainArmEncoder.getAngle());
   }
-
   /**
    * This function is called once each time the robot enters Disabled mode.
    * You can use it to reset any subsystem information you want to clear when
@@ -63,13 +62,11 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
   }
-
   @Override
   public void disabledPeriodic() {
 
     Scheduler.getInstance().run();
   }
-
   /**
    * This autonomous (along with the chooser code above) shows how to select
    * between different autonomous modes using the dashboard. The sendable
@@ -92,11 +89,11 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
+    commandSuites.startAutoCommands();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.start();
     }
   }
-
   /**
    * This function is called periodically during autonomous.
    */
@@ -104,7 +101,6 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
   }
-
   @Override
   public void teleopInit() {
     commandSuites.startTeleopCommands();
@@ -116,7 +112,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
   }
-
   /**
    * This function is called periodically during operator control.
    */
@@ -125,12 +120,6 @@ public class Robot extends TimedRobot {
     
 
     Scheduler.getInstance().run();
-  }
-
-  public void stopAllMotors(){
-    for(TalonSRX talon : RobotMap.allMotorLeads){
-        talon.set(ControlMode.PercentOutput, 0);
-    }
   }
   /**
    * This function is called periodically during test mode.

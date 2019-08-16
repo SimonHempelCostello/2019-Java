@@ -2,10 +2,8 @@ package frc.robot.tools.pathTools;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
-import frc.robot.RobotConfig;
 import frc.robot.RobotStats;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -28,12 +26,11 @@ public class PathSetup {
 		leftFollower = generateLeftPathFollower();
 		isReversed = reverse;
 	}
-	public PathSetup(File file, boolean reverse){
+	public PathSetup(File file, boolean reverse) throws IOException {
 		
-		try {
-			mainPath = Pathfinder.readFromCSV(file);
-		} catch (IOException e) {
-		}
+		
+		mainPath = Pathfinder.readFromCSV(file);
+
 		rightFollower = generateRightPathFollower();
 		leftFollower = generateLeftPathFollower();
 		isReversed = reverse;

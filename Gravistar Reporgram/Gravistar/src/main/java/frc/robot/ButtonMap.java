@@ -59,5 +59,6 @@ public class ButtonMap {
     public static boolean inTakeBall(){
         return (oi.operatorController.getRawAxis(3)>0.5);
     }
+    
 
 }

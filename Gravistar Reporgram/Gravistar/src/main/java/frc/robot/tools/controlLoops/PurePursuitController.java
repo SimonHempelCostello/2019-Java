@@ -58,25 +58,22 @@ public class PurePursuitController extends Command {
     public double endThetaError;
     private boolean shouldEnd;
     private boolean usesOutsideOdometry;
-    //no carried over position information
     public PurePursuitController(PathSetup path, double lookAhead, double kValue, double distoEndError){
         chosenPath = path;
         lookAheadDistance = lookAhead;  
         k = kValue;  
         endError = distoEndError;
-        odometry = new Odometry(chosenPath.getReversed());
         usesOutsideOdometry = false;
         //requires(RobotMap.drive);
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
-    public PurePursuitController(PathSetup path, double lookAhead, double kValue, double distoEndError, Odometry outsideOdometry){
+    public PurePursuitController(PathSetup path, double lookAhead, double kValue, double distoEndError, Boolean outsideOdometry){
         chosenPath = path;
         lookAheadDistance = lookAhead;  
         k = kValue;  
         endError = distoEndError;
-        odometry = outsideOdometry;
-        usesOutsideOdometry = true;
+        usesOutsideOdometry = outsideOdometry;
         //requires(RobotMap.drive);
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -84,26 +81,29 @@ public class PurePursuitController extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        shouldEnd = false;
- 
-        if(!usesOutsideOdometry){ 
-            odometry.zero();
-            odometry.start();
-            if(startingX !=0 && startingY!=0){
-                odometry.setX(startingX);
-                odometry.setY(startingY);
-            }
-            else{
-                odometry.setX(chosenPath.getMainPath().get(0).x);
-                odometry.setY(chosenPath.getMainPath().get(0).y);
-            }
-            if(startingTheta!=0){
-                odometry.setTheta(startingTheta);
-            }
-            else{
-                odometry.setTheta(0);
-            }
+        if(usesOutsideOdometry){
+            startingX = RobotMap.drive.getDriveTrainX();
+            startingY=  RobotMap.drive.getDriveTrainY();
         }
+        shouldEnd = false;
+        odometry = new Odometry(chosenPath.getReversed());
+        odometry.zero();
+        odometry.start();
+        if(startingX !=0 && startingY!=0){
+            odometry.setX(startingX);
+            odometry.setY(startingY);
+        }
+        else{
+            odometry.setX(chosenPath.getMainPath().get(0).x);
+            odometry.setY(chosenPath.getMainPath().get(0).y);
+        }
+        if(startingTheta!=0){
+            odometry.setTheta(startingTheta);
+        }
+        else{
+            odometry.setTheta(0);
+        }
+        
 
         if(chosenPath.getMainPath().get(0).x >= chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).x){
             if(chosenPath.getReversed()){

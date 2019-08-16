@@ -47,6 +47,17 @@ public class Odometry extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
+  public Odometry(boolean reversed, double startingX, double startingY) {
+   
+    isReversed = reversed;
+    leftDriveEncoder = new DriveEncoder(RobotMap.leftDriveLead, RobotMap.leftDriveLead.getSelectedSensorPosition(0));
+    rightDriveEncoder = new DriveEncoder(RobotMap.rightDriveLead, RobotMap.rightDriveLead.getSelectedSensorPosition(0));
+    navx = new Navx(RobotMap.navx);
+    x = startingX;
+    y = startingY;
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+  }
   public void reverseOdometry(boolean revsered){
     isReversed = revsered;
 
