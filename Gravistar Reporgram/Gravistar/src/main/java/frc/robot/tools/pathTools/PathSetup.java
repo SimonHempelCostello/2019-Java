@@ -26,11 +26,13 @@ public class PathSetup {
 		leftFollower = generateLeftPathFollower();
 		isReversed = reverse;
 	}
-	public PathSetup(File file, boolean reverse) throws IOException {
-		
-		
-		mainPath = Pathfinder.readFromCSV(file);
-
+	public PathSetup(File file, boolean reverse){
+		try {
+			mainPath = Pathfinder.readFromCSV(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		rightFollower = generateRightPathFollower();
 		leftFollower = generateLeftPathFollower();
 		isReversed = reverse;

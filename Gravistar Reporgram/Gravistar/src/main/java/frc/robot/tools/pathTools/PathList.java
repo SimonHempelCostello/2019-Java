@@ -20,14 +20,10 @@ public class PathList {
   //for example for a path from (x,y,h) to (0,0,0) a path that goes from (0,0,0) to (x,y,h) would look the same but for one you would 
   // be decreasing y units on the coordinate plane, while in the other you would be increasing y units
   public PathList() {
-    try {
-      test1Path = new PathSetup(testFile, false);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    test1Path = new PathSetup(testFile, false);
 	}
     
-  }
+  
   public void resetAllPaths(){
   }
 }
