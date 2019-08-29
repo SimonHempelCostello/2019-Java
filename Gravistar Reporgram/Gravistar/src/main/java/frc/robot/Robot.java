@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.tools.pathTools.Odometry;
+import frc.robot.tools.pathTools.PathList;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,6 +28,7 @@ import frc.robot.tools.pathTools.Odometry;
 public class Robot extends TimedRobot {
   public static OI m_oi;
   Command m_autonomousCommand;
+  public static PathList pathlist = new PathList();;
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
   /**
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot {
     RobotMap.drive.startAutoOdometry();
     robotConfig.setStartingConfig();
     m_oi = new OI();
+  
   }
   /**
    * This function is called every robot packet, no matter the mode. Use

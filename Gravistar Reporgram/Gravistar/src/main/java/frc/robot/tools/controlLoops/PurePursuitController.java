@@ -85,11 +85,9 @@ public class PurePursuitController extends Command {
             startingX = RobotMap.drive.getDriveTrainX();
             startingY=  RobotMap.drive.getDriveTrainY();
         }
+        odometry = new Odometry(false);
         shouldEnd = false;
-
-        System.out.println(chosenPath.getReversed());
         odometry.zero();
-
         odometry.start();
         if(startingX !=0 && startingY!=0){
             odometry.setX(startingX);

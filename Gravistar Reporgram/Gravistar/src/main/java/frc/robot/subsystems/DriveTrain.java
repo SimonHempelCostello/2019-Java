@@ -126,10 +126,10 @@ public class DriveTrain extends Subsystem {
 		
 	}
 	public void setLeftSpeed(double speed){
-		SmartDashboard.putNumber("output", leftMainDrive.getVelocity());
-		SmartDashboard.putNumber("error", RobotMap.leftDriveLead.getClosedLoopError());
-		SmartDashboard.putNumber("target", RobotMap.leftDriveLead.getClosedLoopTarget());
-		SmartDashboard.putNumber("position", leftMainDrive.getDistance());
+		//SmartDashboard.putNumber("output", leftMainDrive.getVelocity());
+		//SmartDashboard.putNumber("error", RobotMap.leftDriveLead.getClosedLoopError());
+		//SmartDashboard.putNumber("target", RobotMap.leftDriveLead.getClosedLoopTarget());
+		//SmartDashboard.putNumber("position", leftMainDrive.getDistance());
 		RobotMap.leftDriveLead.set(ControlMode.Velocity, leftMainDrive.convertftpersToNativeUnitsper100ms(speed));
 	}
 	public void setRightSpeed(double speed){

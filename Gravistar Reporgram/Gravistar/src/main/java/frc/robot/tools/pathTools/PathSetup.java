@@ -2,8 +2,10 @@ package frc.robot.tools.pathTools;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
+import frc.robot.RobotConfig;
 import frc.robot.RobotStats;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -26,12 +28,10 @@ public class PathSetup {
 		leftFollower = generateLeftPathFollower();
 		isReversed = reverse;
 	}
-	public PathSetup(File file, boolean reverse){
+	public PathSetup(File file, boolean reverse) {
 		try {
 			mainPath = Pathfinder.readFromCSV(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		rightFollower = generateRightPathFollower();
 		leftFollower = generateLeftPathFollower();
@@ -39,7 +39,7 @@ public class PathSetup {
 	}
 	public Trajectory generateMainPath() {
 		// all units are in feet, cause MURICA!, basically the path calculations are assuming 1/20th of a second between updates, and a max velcoity of v ft/sec, a max acceleration of a ft/sec, and a max jerk of 75 feet/sec^3
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_FAST, 0.05,velocity,RobotStats.robotMaxAccertion, 75.0);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_FAST, 0.05,velocity, RobotStats.robotMaxAccertion, 75.0);
 		Trajectory trajectory = Pathfinder.generate(points, config);
 		return trajectory;
 	}
@@ -59,13 +59,15 @@ public class PathSetup {
 		TankModifier modifier = new TankModifier(mainPath).modify(RobotStats.robotBaseDistance);
 		Trajectory right= modifier.getRightTrajectory();
 		DistanceFollower rightfollower = new DistanceFollower(right);
+		//this is a way to print out what pathfinder expects the robot to do and how that is supposed to happen
 		return rightfollower;
 	}
 	public void pathdata(){
-		for(int i = 0; i< mainPath.length();i++){
+		  for(int i = 0; i< mainPath.length();i++){
 			jaci.pathfinder.Trajectory.Segment seg = mainPath.get(i);
-			System.out.println( "%f,%f,%f,%f,%f,%f,%f,%f\n"+ seg.dt +" dt " + seg.x+" dx "+ seg.y+" dy "+ seg.position+" dpos "+ seg.velocity+" dvel "+
-			seg.acceleration+" dacc "+ seg.jerk+" dj "+ seg.heading+" dhead ");
+			System.out.println( "%f,%f,%f,%f,%f,%f,%f,%f\n"+ 
+			seg.dt +" dt " + seg.x+" dx "+ seg.y+" dy "+ seg.position+" dpos "+ seg.velocity+" dvel "+
+				seg.acceleration+" dacc "+ seg.jerk+" dj "+ seg.heading+" dhead ");
 
 		}
 		
