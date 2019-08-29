@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
     robotConfig = new RobotConfig();
     RobotMap.drive.startAutoOdometry();
     robotConfig.setStartingConfig();
+    RobotMap.drive.initVelocityPIDs();
     m_oi = new OI();
   
   }
@@ -54,6 +55,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
     //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
     //SmartDashboard.putNumber("armSpinnyBoy1",RobotMap.arm.mainArmEncoder.getAngle());
   }

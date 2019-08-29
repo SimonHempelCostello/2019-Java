@@ -14,6 +14,7 @@ import frc.robot.Robot;
 import frc.robot.RobotConfig;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
+import frc.robot.commands.autos.BasicTestAuto;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -24,6 +25,7 @@ import frc.robot.ButtonMap;
 
 public class DriveInterface extends Command {
 	private boolean shouldFinish;
+	private BasicTestAuto basicTestAuto;
 	public DriveInterface() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
@@ -34,7 +36,9 @@ public class DriveInterface extends Command {
 	@Override
 	protected void initialize() {
 		shouldFinish = false;
+		basicTestAuto = new BasicTestAuto();
 		RobotConfig.setDriveMotorsBrake();
+		RobotMap.drive.startAutoOdometry();
 		RobotMap.drive.initVelocityPIDs();
 	}
 
@@ -42,10 +46,9 @@ public class DriveInterface extends Command {
 	@Override
 	protected void execute() {
 		if(ButtonMap.testVelocity()){
-			RobotMap.drive.setLeftSpeed(6);
-			RobotMap.drive.setRightSpeed(6);
+			basicTestAuto.start();
 		}
-		else{
+		else if(!basicTestAuto.isRunning()){
 			RobotMap.drive.arcadeDrive();
 		}
 
