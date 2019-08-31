@@ -36,7 +36,6 @@ public class DriveInterface extends Command {
 	@Override
 	protected void initialize() {
 		shouldFinish = false;
-		basicTestAuto = new BasicTestAuto();
 		RobotConfig.setDriveMotorsBrake();
 		RobotMap.drive.startAutoOdometry();
 		RobotMap.drive.initVelocityPIDs();
@@ -46,9 +45,11 @@ public class DriveInterface extends Command {
 	@Override
 	protected void execute() {
 		if(ButtonMap.testVelocity()){
-			basicTestAuto.start();
+			RobotMap.visionRelay1.set(RobotMap.lightRingOn);
+			RobotMap.drive.trackVisionTape();
 		}
-		else if(!basicTestAuto.isRunning()){
+		else{
+			RobotMap.visionRelay1.set(RobotMap.lightRingOff);
 			RobotMap.drive.arcadeDrive();
 		}
 

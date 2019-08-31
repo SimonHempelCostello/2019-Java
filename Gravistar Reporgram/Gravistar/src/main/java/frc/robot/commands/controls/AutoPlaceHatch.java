@@ -5,19 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.autos;
+package frc.robot.commands.controls;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.Robot;
-import frc.robot.tools.controlLoops.PurePursuitController;
-import frc.robot.tools.pathTools.PathList;
-
-public class BasicTestAuto extends CommandGroup {
+import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.command.WaitCommand;
+public class AutoPlaceHatch extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public BasicTestAuto() {
-    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 200.5, 5.0, 0.0005, false));
+  public AutoPlaceHatch() {
+    addParallel(new SetPiston(RobotMap.hatchGrabberPiston, RobotMap.hatchMechGrab));
+    addSequential(new SetPiston(RobotMap.hatchPushOutPiston, RobotMap.hatchMechOut));
+    addSequential(new WaitCommand(0.45));
+    addParallel(new SetPiston(RobotMap.hatchGrabberPiston, RobotMap.hatchMechRelease));
+    addSequential(new WaitCommand(0.15));
+    addSequential(new SetPiston(RobotMap.hatchPushOutPiston, RobotMap.hatchMechIn));
+    addSequential(new WaitCommand(0.25));
+    addParallel(new SetPiston(RobotMap.hatchGrabberPiston, RobotMap.hatchMechGrab));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

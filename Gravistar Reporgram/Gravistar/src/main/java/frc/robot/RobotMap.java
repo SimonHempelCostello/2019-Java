@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import frc.robot.sensors.ArmEncoder;
@@ -75,7 +76,7 @@ public class RobotMap {
   public static Relay.Value lightRingOn = Relay.Value.kForward;
   public static Relay.Value lightRingOff = Relay.Value.kReverse;
 
-  
+  public static SerialPort serialPort1 = new SerialPort(115200, Port.kUSB);
   
 	public static Counter ultraSonic1 = new Counter(0);
 	public static Counter ultraSonic2 = new Counter(1);

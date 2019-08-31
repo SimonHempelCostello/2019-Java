@@ -10,13 +10,17 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.ButtonMap;
+import frc.robot.Robot;
 import frc.robot.RobotConfig;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
 import frc.robot.sensors.DriveEncoder;
+import frc.robot.tools.controlLoops.PID;
 import frc.robot.tools.controlLoops.VelocityPID;
 import frc.robot.tools.pathTools.Odometry;
 
@@ -37,12 +41,18 @@ public class DriveTrain extends Subsystem {
   public static DriveEncoder rightMainDrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
 	private double speed;
   private double f = 0.332;
-  private double p = 0.0;
-  private double i = 0.00000;
-  private double d = 0.0;
+  private double p = 0.71;
+  private double i = 0.000001;
+  private double d = 7.5;
 	private int profile = 0;
 	private Odometry autoOdometry;
-
+	private PID alignmentPID;
+	private double alignmentP = 0.011;
+	private double alignmenti= 0.000;
+	private double alignmentd;
+	private double power;
+	private boolean connected;
+	private double distance;
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -77,7 +87,12 @@ public class DriveTrain extends Subsystem {
     RobotMap.rightDriveLead.config_kI(profile, i, 0);
     RobotMap.rightDriveLead.config_kD(profile, d, 0);
     RobotMap.rightDriveLead.set(ControlMode.Velocity, rightMainDrive.convertftpersToNativeUnitsper100ms(speed));
-
+	}
+	public void initAlignmentPID(){
+		alignmentPID = new PID(alignmentP, alignmenti, alignmentd);
+		alignmentPID.setMaxOutput(0.4);
+		alignmentPID.setMinOutput(-0.4);
+    alignmentPID.setSetPoint(0);
 	}
   public void setHighGear(){
     RobotMap.shifters.set(RobotMap.highGear);
@@ -122,14 +137,45 @@ public class DriveTrain extends Subsystem {
 				sensitivity =1;
     }
 	}
-	public void autoHatchPickup(){
+	public boolean trackVisionTape(){
+    RobotMap.drive.setLowGear();
+		Robot.visionCamera.updateVision();
+		if(Timer.getFPGATimestamp()-Robot.visionCamera.lastParseTime>0.25){
+			alignmentPID.updatePID(0);
+		}
+		else{
+			alignmentPID.updatePID(Robot.visionCamera.getAngle());
+		}
 		
+    power = 0.35;
+    RobotMap.drive.setLowGear();
+    RobotConfig.setDriveMotorsBrake();
+    connected = RobotMap.mainUltrasonicSensor2.isConnected();
+    distance = RobotMap.mainUltrasonicSensor2.getDistance();
+    if(distance>=1.5&&connected&&distance<7){
+      power = Math.pow(distance/15,0.8);
+    }
+    else if(distance<1.5&&connected){
+			power = 0.0;
+    }
+		RobotMap.leftDriveLead.set(ControlMode.PercentOutput, -power+ alignmentPID.getResult());
+		RobotMap.rightDriveLead.set(ControlMode.PercentOutput, -power- alignmentPID.getResult());
+		if(ButtonMap.autoBreakTapeTracking()&&RobotState.isAutonomous()){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
+	public void Stop(){
+		RobotMap.leftDriveLead.set(ControlMode.PercentOutput, 0);
+		RobotMap.rightDriveLead.set(ControlMode.PercentOutput, 0);
+
+	}
+		
 	public void setLeftSpeed(double speed){
 		SmartDashboard.putNumber("output", RobotMap.leftDriveLead.getMotorOutputPercent());
-		//SmartDashboard.putNumber("error", RobotMap.leftDriveLead.getClosedLoopError());
 		SmartDashboard.putNumber("target", RobotMap.leftDriveLead.getClosedLoopTarget());
-		//SmartDashboard.putNumber("position", leftMainDrive.getDistance());
 		RobotMap.leftDriveLead.set(ControlMode.Velocity, leftMainDrive.convertftpersToNativeUnitsper100ms(speed));
 	}
 	public void setRightSpeed(double speed){

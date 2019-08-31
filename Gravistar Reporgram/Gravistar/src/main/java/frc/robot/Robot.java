@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.sensors.VisionCamera;
 import frc.robot.tools.pathTools.Odometry;
 import frc.robot.tools.pathTools.PathList;
 
@@ -31,17 +32,20 @@ public class Robot extends TimedRobot {
   public static PathList pathlist = new PathList();;
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
+  public static VisionCamera visionCamera;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
+    visionCamera = new VisionCamera(RobotMap.serialPort1);
     commandSuites = new CommandSuites();
     robotConfig = new RobotConfig();
     RobotMap.drive.startAutoOdometry();
     robotConfig.setStartingConfig();
     RobotMap.drive.initVelocityPIDs();
+    RobotMap.drive.initAlignmentPID();
     m_oi = new OI();
   
   }
@@ -56,6 +60,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
+    SmartDashboard.putString("CameraString", visionCamera.getString());
     //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
     //SmartDashboard.putNumber("armSpinnyBoy1",RobotMap.arm.mainArmEncoder.getAngle());
   }

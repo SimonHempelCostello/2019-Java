@@ -35,6 +35,9 @@ public class ButtonMap {
     public static boolean testVelocity(){
         return oi.driverController.getXButton();
     }
+    public static boolean autoBreakTapeTracking(){
+        return oi.driverController.getBButton();
+    }
     public static boolean armUp(){
         return oi.operatorController.getYButton();  
     }
@@ -59,6 +62,8 @@ public class ButtonMap {
     public static boolean inTakeBall(){
         return (oi.operatorController.getRawAxis(3)>0.5);
     }
+
+    
     
 
 }

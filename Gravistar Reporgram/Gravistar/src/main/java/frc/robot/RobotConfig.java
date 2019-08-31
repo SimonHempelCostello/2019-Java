@@ -30,7 +30,7 @@ public class RobotConfig {
             talon.enableVoltageCompensation(true);
         }
         RobotConfig.setAllMotorsBrake();
-        RobotConfig.setDriveMotorsCoast();
+        RobotConfig.setDriveMotorsBrake();
         
         RobotMap.rightDriveLead.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,0);
 		RobotMap.leftDriveLead.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,0);
