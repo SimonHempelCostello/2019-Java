@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.autos.BasicTestAuto;
+import frc.robot.commands.autos.testAuto;
 import frc.robot.commands.humanInterface.ArmInterface;
 import frc.robot.commands.humanInterface.DriveInterface;
 import frc.robot.tools.controlLoops.VelocityPID;
@@ -18,11 +18,11 @@ import frc.robot.tools.controlLoops.VelocityPID;
 public class CommandSuites {
     public DriveInterface driveInterface;
     public ArmInterface armInterface;
-    public BasicTestAuto basicTestAuto;
+    public testAuto basicTestAuto;
     public CommandSuites(){
         armInterface = new ArmInterface();
         driveInterface = new DriveInterface();
-        basicTestAuto = new BasicTestAuto();
+        basicTestAuto = new testAuto();
     }
     public void startAutoCommands(){
         basicTestAuto.start();

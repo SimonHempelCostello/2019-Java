@@ -14,7 +14,6 @@ import frc.robot.Robot;
 import frc.robot.RobotConfig;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
-import frc.robot.commands.autos.BasicTestAuto;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -25,7 +24,6 @@ import frc.robot.ButtonMap;
 
 public class DriveInterface extends Command {
 	private boolean shouldFinish;
-	private BasicTestAuto basicTestAuto;
 	public DriveInterface() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);

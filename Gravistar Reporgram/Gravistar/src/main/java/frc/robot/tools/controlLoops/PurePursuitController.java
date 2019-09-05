@@ -252,7 +252,13 @@ public class PurePursuitController extends Command {
   private void setWheelVelocities(double targetVelocity, double curvature){
         double leftVelocity;
         double rightVelocity;
-        double v = targetVelocity;
+        double v;
+        if(Math.abs(targetVelocity) <0.95){
+            v = 0.95;
+        }
+        else{
+            v = targetVelocity;
+        }
         double c = curvature;
         if(chosenPath.getReversed()){
             v = -v;
