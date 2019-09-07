@@ -62,9 +62,9 @@ public class Arm extends Subsystem {
   public void setArmPostion(double angle){
     double compensationValue = compensationFactor*mainArmEncoder.getAngle();
     RobotMap.armMaster.set(ControlMode.MotionMagic, RobotMap.arm.mainArmEncoder.convertAngleToEncoderTics(angle));
-    SmartDashboard.putNumber("error", RobotMap.armMaster.getClosedLoopError(0));
-    SmartDashboard.putNumber("output", RobotMap.armMaster.getMotorOutputPercent());
-    SmartDashboard.putNumber("desiredAnlge", RobotMap.armMaster.getClosedLoopTarget(0));
+    //SmartDashboard.putNumber("error", RobotMap.armMaster.getClosedLoopError(0));
+    //SmartDashboard.putNumber("output", RobotMap.armMaster.getMotorOutputPercent());
+    //SmartDashboard.putNumber("desiredAnlge", RobotMap.armMaster.getClosedLoopTarget(0));
 
   }
   public void setHatchMechOut(){

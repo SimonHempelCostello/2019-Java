@@ -38,7 +38,6 @@ public class VisionCamera {
             tryDistance = parseDistance(jsonString);
             tryAngle = parseAngle(jsonString);
          }
-         SmartDashboard.putString("testnum", jsonString);
    
          if (tryAngle != badAngle){
             distance = tryDistance;

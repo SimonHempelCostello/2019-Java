@@ -14,8 +14,8 @@ import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Waypoint;
 
 public class PathList {
-  private File testFile = new File("/home/lvuser/deploy/testPath.pf1.csv");
-  private File testFile2 = new File("/home/lvuser/deploy/TestPath2.pf1.csv");
+  private File testFile = new File("/home/lvuser/deploy/testPath1.pf1.csv");
+  private File testFile2 = new File("/home/lvuser/deploy/testPath2.pf1.csv");
 
   public PathSetup test1Path;
   public PathSetup test2Path;
@@ -25,7 +25,7 @@ public class PathList {
   // be decreasing y units on the coordinate plane, while in the other you would be increasing y units
   public PathList() {
     test1Path = new PathSetup(testFile, false);
-    test2Path = new PathSetup(testFile, true);
+    test2Path = new PathSetup(testFile2, false);
 
 	}
     
