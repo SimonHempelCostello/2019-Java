@@ -17,7 +17,7 @@ public class GrabandRetrieveHatch extends CommandGroup {
    * Add your docs here.
    */
   public GrabandRetrieveHatch() {
-    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 2.5, 5.0, 0.0005, false));
+    //addSequential(new PurePursuitController(Robot.pathlist.test1Path, 2.5, 5.0, 0.0005, false));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

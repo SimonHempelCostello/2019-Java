@@ -16,7 +16,7 @@ public class testAuto extends CommandGroup {
    * Add your docs here.
    */
   public testAuto() {
-    addSequential(new PurePursuitController(Robot.pathlist.test2Path, 2.5, 5.0, 0.05, false));
+    addSequential(new PurePursuitController(Robot.pathlist.test2Path, 0.85, 5.0, 0.05, false));
 
     // Add Commands here:
     // e.g. addSequential(new Command1());

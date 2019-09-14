@@ -29,7 +29,7 @@ import frc.robot.tools.pathTools.PathList;
 public class Robot extends TimedRobot {
   public static OI m_oi;
   Command m_autonomousCommand;
-  public static PathList pathlist = new PathList();;
+  public static PathList pathlist = new PathList();
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
   public static VisionCamera visionCamera;

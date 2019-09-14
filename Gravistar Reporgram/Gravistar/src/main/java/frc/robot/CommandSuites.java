@@ -22,9 +22,9 @@ public class CommandSuites {
     public CommandSuites(){
         armInterface = new ArmInterface();
         driveInterface = new DriveInterface();
-        basicTestAuto = new testAuto();
     }
     public void startAutoCommands(){
+        basicTestAuto = new testAuto();
         basicTestAuto.start();
 
     }

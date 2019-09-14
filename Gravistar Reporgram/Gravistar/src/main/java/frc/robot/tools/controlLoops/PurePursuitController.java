@@ -59,6 +59,7 @@ public class PurePursuitController extends Command {
   private double startingTheta = 0;
   private double startingX = 0;
   private double startingY = 0;
+  private int closestPointInt;
   public double endThetaError;
   private boolean useOutsideOdometry;
   private boolean shouldEnd;
@@ -69,6 +70,7 @@ public class PurePursuitController extends Command {
         k = kValue;  
         endError = distoEndError;
         requires(RobotMap.drive);
+        useOutsideOdometry = false;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
   }
@@ -100,8 +102,8 @@ public class PurePursuitController extends Command {
             odometry.setY(RobotMap.drive.getDriveTrainY());
         }
         else{
-            odometry.setX(0);
-            odometry.setY(0);
+            odometry.setX(chosenPath.getMainPath().get(0).x);
+            odometry.setY(chosenPath.getMainPath().get(0).y);
         }
         if(startingTheta!=0){
             odometry.setTheta(startingTheta);
@@ -162,6 +164,7 @@ public class PurePursuitController extends Command {
             if(distToPoint<minDistanceToPoint){
                 minDistanceToPoint = distToPoint;
                 closestSegment = i;
+                closestPointInt = i;
                 closestPoint.setLocation(chosenPath.getMainPath().get(i).x, chosenPath.getMainPath().get(i).y);
             }
         }
@@ -253,8 +256,8 @@ public class PurePursuitController extends Command {
         double leftVelocity;
         double rightVelocity;
         double v;
-        if(Math.abs(targetVelocity) <0.95){
-            v = 0.95;
+        if(Math.abs(targetVelocity) <0.45){
+            v = 0.45;
         }
         else{
             v = targetVelocity;
@@ -264,8 +267,8 @@ public class PurePursuitController extends Command {
             v = -v;
             c = -c;
         }
-        leftVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;
-        rightVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
+        leftVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
+        rightVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;
         SmartDashboard.putNumber("left", leftVelocity);
         SmartDashboard.putNumber("right", rightVelocity);
 
@@ -275,8 +278,8 @@ public class PurePursuitController extends Command {
 
         }
         else{
-            RobotMap.drive.setLeftSpeed(leftVelocity+1);
-            RobotMap.drive.setRightSpeed(rightVelocity+1);
+            RobotMap.drive.setLeftSpeed(leftVelocity);
+            RobotMap.drive.setRightSpeed(rightVelocity);
         }
        // SmartDashboard.putNumber("left", leftVelocity);
         //SmartDashboard.putNumber("right",rightVelocity);  
@@ -301,7 +304,7 @@ public class PurePursuitController extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if(distToEndVector.length()<endError){
+    if(closestPointInt >= chosenPath.getMainPath().length()-2){
         return true;
     } 
     else{
