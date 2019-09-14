@@ -59,7 +59,7 @@ public class DriveTrain extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
 	}
 	public void startAutoOdometry(){
-		autoOdometry = new Odometry(false);
+		autoOdometry = new Odometry(true);
 		autoOdometry.start();
 	};
 	public double getDriveTrainX(){

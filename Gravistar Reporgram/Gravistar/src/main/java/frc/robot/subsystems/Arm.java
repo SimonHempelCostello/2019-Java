@@ -60,7 +60,6 @@ public class Arm extends Subsystem {
     RobotMap.armMaster.set(ControlMode.PercentOutput,value);
   }
   public void setArmPostion(double angle){
-    double compensationValue = compensationFactor*mainArmEncoder.getAngle();
     RobotMap.armMaster.set(ControlMode.MotionMagic, RobotMap.arm.mainArmEncoder.convertAngleToEncoderTics(angle));
     SmartDashboard.putNumber("error", RobotMap.armMaster.getClosedLoopError(0));
     SmartDashboard.putNumber("output", RobotMap.armMaster.getMotorOutputPercent());
@@ -78,12 +77,6 @@ public class Arm extends Subsystem {
   }
   public void releaseHatchGrabbers(){
     releaseHatchGrabber.start();
-  }
-  public void keepArmUp(){
-    setArmPercentPower(0.1);
-  }
-  public void keepArmDown(){
-    setArmPercentPower(-0.1);
   }
   public void outTakeBall(){
     RobotMap.intakeMotor.set(ControlMode.PercentOutput, 1.0);
