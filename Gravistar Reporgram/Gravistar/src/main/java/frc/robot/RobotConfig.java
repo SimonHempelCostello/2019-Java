@@ -30,7 +30,6 @@ public class RobotConfig {
             talon.enableVoltageCompensation(true);
         }
         RobotConfig.setAllMotorsBrake();
-        RobotConfig.setDriveMotorsBrake();
         
         RobotMap.rightDriveLead.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,0);
 		RobotMap.leftDriveLead.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,0);
@@ -56,18 +55,27 @@ public class RobotConfig {
         RobotMap.armMaster.setSelectedSensorPosition((int)RobotMap.arm.mainArmEncoder.convertAngleToEncoderTics(RobotStats.armUpAngle));
         RobotMap.armMaster.setSensorPhase(true);
         
-    	for(TalonSRX talon:RobotMap.allMotors) {
+    	for(TalonSRX talon:RobotMap.driveMotors) {
     		talon.configContinuousCurrentLimit(RobotStats.driveMotorContinuousCurrentHighGear);
     		talon.configPeakCurrentLimit(RobotStats.driveMotorPeakCurrentHighGear);
             talon.configPeakCurrentDuration(RobotStats.driveMotorPeakCurrentDurationHighGear);
-            talon.enableCurrentLimit(false);
-		}
+            talon.enableCurrentLimit(true);
+        }
+        RobotMap.intakeMotor.configContinuousCurrentLimit(RobotStats.intakeContinuousCurrent);
+        RobotMap.intakeMotor.configPeakCurrentLimit(RobotStats.intakePeakCurrent);
+        RobotMap.intakeMotor.configContinuousCurrentLimit(RobotStats.intakePeakCurrent);
+        RobotMap.intakeMotor.configPeakCurrentDuration(100);
+        RobotMap.intakeMotor.enableCurrentLimit(true);
+
+
+
 
     }
     public void setTeleopConfig(){
+        RobotConfig.setDriveMotorsCoast();
     }
     public void setAutoConfig(){
-
+        RobotConfig.setDriveMotorsBrake();
     }
     public static void setAllMotorsBrake() {
 		for(TalonSRX talon:RobotMap.allMotors){

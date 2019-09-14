@@ -60,6 +60,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    if(RobotMap.armMaster.getSensorCollection().isFwdLimitSwitchClosed()){
+      SmartDashboard.putBoolean("fwdLimitSwitch", true);
+      SmartDashboard.putBoolean("revLimitSwitch", false);
+    }
+    else if(RobotMap.armMaster.getSensorCollection().isRevLimitSwitchClosed()){
+      SmartDashboard.putBoolean("fwdLimitSwitch", false);
+      SmartDashboard.putBoolean("revLimitSwitch", true);
+    }
+    else{
+      SmartDashboard.putBoolean("fwdLimitSwitch", false);
+      SmartDashboard.putBoolean("revLimitSwitch", false);
+    }
     SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
     SmartDashboard.putString("CameraString", visionCamera.getString());
     //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());

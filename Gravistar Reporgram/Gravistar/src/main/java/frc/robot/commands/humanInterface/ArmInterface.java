@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.ButtonMap;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
@@ -39,7 +40,7 @@ public class ArmInterface extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
+    SmartDashboard.putNumber("positioner", RobotMap.arm.mainArmEncoder.getAngle());
     RobotMap.arm.initializeArmControl();
     if(RobotMap.armMaster.getSensorCollection().isFwdLimitSwitchClosed()){
       RobotMap.arm.mainArmEncoder.setForwardLimitSwitchAngle();
@@ -57,9 +58,11 @@ public class ArmInterface extends Command {
     else if(ButtonMap.armUp()){
       desiredAngle = RobotStats.armUpAngle;
     }
-    if(Math.abs(ButtonMap.armManualControlValue())>0.1){
-      RobotMap.arm.setArmPercentPower(ButtonMap.armManualControlValue()*0.5);
+    else if(Math.abs(ButtonMap.armManualControlValue())>0.2){
       desiredAngle = RobotMap.arm.mainArmEncoder.getAngle();
+    }
+    if(Math.abs(ButtonMap.armManualControlValue())>0.2){
+      RobotMap.arm.setArmPercentPower(ButtonMap.armManualControlValue());
     }
     else{
       RobotMap.arm.setArmPostion(desiredAngle);
