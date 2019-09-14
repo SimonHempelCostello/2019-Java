@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
     RobotMap.drive.startAutoOdometry();
     robotConfig.setStartingConfig();
     RobotMap.drive.initVelocityPIDs();
+    RobotMap.drive.startAutoOdometry();
     RobotMap.drive.initAlignmentPID();
     m_oi = new OI();
   
