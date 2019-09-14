@@ -34,10 +34,13 @@ public class PlaceHatch extends Command {
   @Override
   protected void execute() {
     if(!ButtonMap.releaseHatch()){
-      RobotMap.arm.releaseHatchGrabbers();
       if(startTimer){
+        RobotMap.arm.releaseHatchGrabbers();
         startTime = Timer.getFPGATimestamp();
         startTimer = false;
+      }
+      else if(Timer.getFPGATimestamp()-startTime>0.35){
+        RobotMap.arm.setHatchMechIn();
       }
     }
   }
@@ -45,13 +48,12 @@ public class PlaceHatch extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return !ButtonMap.releaseHatch()&&(Timer.getFPGATimestamp()-startTime)>0.35;
+    return !ButtonMap.releaseHatch()&&(Timer.getFPGATimestamp()-startTime)>0.75;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    RobotMap.arm.setHatchMechIn();
     RobotMap.arm.tenseHatchGrabbers();
   }
 

@@ -7,11 +7,14 @@
 
 package frc.robot.commands.controls;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-
+import frc.robot.ButtonMap;
 import frc.robot.RobotMap;
+
 public class GrabHatch extends Command {
-  private AutoGrabHatch grabHatch;
+  private double startTime;
+  private boolean startTimer;
   public GrabHatch() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -20,33 +23,38 @@ public class GrabHatch extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    grabHatch = new AutoGrabHatch();
+    startTimer = true;
+    RobotMap.arm.setHatchMechOut();
+    RobotMap.arm.releaseHatchGrabbers();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    RobotMap.visionRelay1.set(RobotMap.lightRingOn);
+    if(!ButtonMap.grabHatch()){
+      if(startTimer){
+        startTime = Timer.getFPGATimestamp();
+        startTimer = false;
+        RobotMap.arm.tenseHatchGrabbers();
+      }
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return RobotMap.drive.trackVisionTape();
+    return !ButtonMap.grabHatch()&&(Timer.getFPGATimestamp()-startTime>0.45);
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    RobotMap.visionRelay1.set(RobotMap.lightRingOff);
-    RobotMap.drive.Stop();
-    grabHatch.start();
+    RobotMap.arm.setHatchMechIn();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    this.end();
   }
 }

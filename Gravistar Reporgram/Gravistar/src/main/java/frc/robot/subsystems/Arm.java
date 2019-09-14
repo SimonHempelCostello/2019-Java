@@ -26,10 +26,10 @@ public class Arm extends Subsystem {
   private double kp = 2.7;
   private double ki = 0.03;
   private double kd = 30;
-  public SwitchPiston tenseHatchGrabber;
-  public SwitchPiston releaseHatchGrabber;
-  public SwitchPiston pushHatchMechOut;
-  public SwitchPiston pullHatchMechIn;
+  private SwitchPiston tenseHatchGrabber;
+  private SwitchPiston releaseHatchGrabber;
+  private SwitchPiston pushHatchMechOut;
+  private SwitchPiston pullHatchMechIn;
   private double kf = 1.274;
   private int acceleration = 1250;
   private int velocity = 1250;
