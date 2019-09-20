@@ -45,8 +45,8 @@ public class Robot extends TimedRobot {
     RobotMap.drive.startAutoOdometry();
     robotConfig.setStartingConfig();
     RobotMap.drive.initVelocityPIDs();
-    RobotMap.drive.startAutoOdometry();
     RobotMap.drive.initAlignmentPID();
+    RobotMap.drive.startAutoOdometry();
     m_oi = new OI();
   
   }
@@ -113,6 +113,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     commandSuites.startAutoCommands();
+    RobotMap.drive.startAutoOdometry();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.start();
     }

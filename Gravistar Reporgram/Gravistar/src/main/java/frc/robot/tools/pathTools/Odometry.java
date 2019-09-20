@@ -32,9 +32,7 @@ public class Odometry extends Command {
   private double y;
   private double yNext;
   private double xNext;
-  private boolean shouldRun;
-  private Notifier odometryrunner  = new Notifier(new OdometryRunnable());
- 
+  private boolean shouldRun; 
   private double dt;
   private boolean isReversed;
   private boolean finish;
@@ -62,48 +60,6 @@ public class Odometry extends Command {
     isReversed = revsered;
 
   }
-  private class OdometryRunnable implements Runnable{
-    //this is a sperate section of code that runs at a different update rate than the rest, this is necessary to match the dt
-     public void run(){
-      if(shouldRun){
-        if(isReversed){
-          leftSideNext = leftDriveEncoder.getDistance();
-          rightSideNext = rightDriveEncoder.getDistance();
-          thetaNext = navx.currentReverseYaw();
-          leftDelta = -(leftSideNext-leftSide);
-          rightDelta = -(rightSideNext-rightSide);
-          centerDelta = (leftDelta+rightDelta)/2;
-          xNext = x-centerDelta*Math.cos(Math.toRadians(thetaNext));
-          yNext = y-centerDelta*Math.sin(Math.toRadians(thetaNext));
-          x = xNext;
-          y = yNext;
-          theta = thetaNext;
-          leftSide = leftSideNext;
-          rightSide = rightSideNext;
-        }
-        else{
-          leftSideNext = leftDriveEncoder.getDistance();
-          rightSideNext = rightDriveEncoder.getDistance();
-          thetaNext = navx.currentYaw();
-          leftDelta = (leftSideNext-leftSide);
-          rightDelta = (rightSideNext-rightSide);
-          centerDelta = (leftDelta+rightDelta)/2;
-          xNext = x+centerDelta*Math.cos(Math.toRadians(thetaNext));
-          yNext = y+centerDelta*Math.sin(Math.toRadians(thetaNext));
-          x = xNext;
-          y = yNext;
-          theta = thetaNext;
-          leftSide = leftSideNext;
-          rightSide = rightSideNext;
-        }
-        
-      }
-      else{
-        odometryrunner.stop();
-      }
-     
-     }
-   }
 
   // Called just before this Command runs the first time
   @Override
@@ -114,7 +70,6 @@ public class Odometry extends Command {
     leftDriveEncoder.softReset();
     rightDriveEncoder.softReset();
     dt = 0.005;
-    odometryrunner.startPeriodic(dt);
     finish = false;
   }
   public void endOdmetry(){
@@ -122,7 +77,7 @@ public class Odometry extends Command {
   }
 
   public void zero(){
-    x =0;
+    x = 0;
     y = 0;
     theta = 0;
     navx.softResetYaw();
@@ -163,6 +118,39 @@ public class Odometry extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if(shouldRun){
+      if(isReversed){
+        leftSideNext = leftDriveEncoder.getDistance();
+        rightSideNext = rightDriveEncoder.getDistance();
+        thetaNext = navx.currentReverseYaw();
+        leftDelta = -(leftSideNext-leftSide);
+        rightDelta = -(rightSideNext-rightSide);
+        centerDelta = (leftDelta+rightDelta)/2;
+        xNext = x-centerDelta*Math.cos(Math.toRadians(thetaNext));
+        yNext = y-centerDelta*Math.sin(Math.toRadians(thetaNext));
+        x = xNext;
+        y = yNext;
+        theta = thetaNext;
+        leftSide = leftSideNext;
+        rightSide = rightSideNext;
+      }
+      else{
+        leftSideNext = leftDriveEncoder.getDistance();
+        rightSideNext = rightDriveEncoder.getDistance();
+        thetaNext = navx.currentYaw();
+        leftDelta = (leftSideNext-leftSide);
+        rightDelta = (rightSideNext-rightSide);
+        centerDelta = (leftDelta+rightDelta)/2;
+        xNext = x+centerDelta*Math.cos(Math.toRadians(thetaNext));
+        yNext = y+centerDelta*Math.sin(Math.toRadians(thetaNext));
+        x = xNext;
+        y = yNext;
+        theta = thetaNext;
+        leftSide = leftSideNext;
+        rightSide = rightSideNext;
+      }
+      
+    }
    
   }
 
@@ -179,7 +167,6 @@ public class Odometry extends Command {
   @Override
   protected void end() {
     shouldRun = false;
-    odometryrunner.stop();
   }
 
   // Called when another command which requires one or more of the same

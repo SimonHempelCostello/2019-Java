@@ -9,6 +9,7 @@ package frc.robot.commands.autos;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
+import frc.robot.commands.controls.DeadReackonDrive;
 import frc.robot.tools.controlLoops.PurePursuitController;
 
 public class testAuto extends CommandGroup {
@@ -16,7 +17,8 @@ public class testAuto extends CommandGroup {
    * Add your docs here.
    */
   public testAuto() {
-    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 1.25, 5.0, 0.05, false));
+    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 1.25, 5.0, 0.05, true));
+    addSequential(new DeadReackonDrive(1.0, 0.2));
     addSequential(new PurePursuitController(Robot.pathlist.test2Path, 1.25, 5.0, 0.05, true));
 
 
