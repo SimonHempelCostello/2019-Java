@@ -38,6 +38,9 @@ public class ButtonMap {
     public static boolean autoBreakTapeTracking(){
         return oi.driverController.getBButton();
     }
+    public static boolean switchCamera(){
+        return oi.driverController.getTriggerAxis(Hand.kLeft)>0.2;
+    }
     public static boolean armUp(){
         return oi.operatorController.getYButton();  
     }

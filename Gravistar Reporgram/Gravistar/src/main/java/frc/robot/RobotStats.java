@@ -19,8 +19,8 @@ public class RobotStats {
     public static double wheelCircum = wheelDiam*Math.PI;
     public static double joyStickDeadZone = 0.015;
     public static double triggerDeadZone = 0.1;
-    public static int driveMotorContinuousCurrentHighGear = 40;
-    public static int driveMotorPeakCurrentHighGear = 60;
+    public static int driveMotorContinuousCurrentHighGear = 35;
+    public static int driveMotorPeakCurrentHighGear = 35;
     public static int intakePeakCurrent = 40;
     public static int intakeContinuousCurrent = 20;
     public static int driveMotorPeakCurrentDurationHighGear = 5000;

@@ -75,7 +75,7 @@ public class RobotConfig {
         RobotConfig.setDriveMotorsCoast();
     }
     public void setAutoConfig(){
-        RobotConfig.setDriveMotorsBrake();
+        RobotConfig.setDriveMotorsCoast();
     }
     public static void setAllMotorsBrake() {
 		for(TalonSRX talon:RobotMap.allMotors){

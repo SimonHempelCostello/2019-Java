@@ -24,8 +24,8 @@ public class CommandSuites {
         driveInterface = new DriveInterface();
     }
     public void startAutoCommands(){
-        basicTestAuto = new testAuto();
-        basicTestAuto.start();
+        armInterface.start();
+        driveInterface.start();
 
     }
     public void endAutoCommands(){

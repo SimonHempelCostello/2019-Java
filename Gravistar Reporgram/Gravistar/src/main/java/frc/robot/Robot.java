@@ -10,15 +10,23 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSink;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.controls.ChangeLightColor;
 import frc.robot.sensors.VisionCamera;
 import frc.robot.tools.pathTools.Odometry;
 import frc.robot.tools.pathTools.PathList;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -32,21 +40,61 @@ public class Robot extends TimedRobot {
   public static PathList pathlist = new PathList();
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
-  public static VisionCamera visionCamera;
+	private UsbCamera camera;
+	private UsbCamera camera2;
+	private VideoSink server;
+	public static boolean hasCamera = false;
+	private boolean cameraBoolean = false;
+	public static ChangeLightColor changeLightColor = new ChangeLightColor(1,0, 0, RobotMap.canifier1);
+	public static ChangeLightColor changeLightColor1 = new ChangeLightColor(0,0, 0, RobotMap.canifier2);
+  private SerialPort serialPort1 = new SerialPort(115200, Port.kUSB);
+	public static VisionCamera visionCamera;
+	public static SerialPort jevois1;
+	private double byteCount;
+	private boolean ableToSwitch;
+	private int runCounter = 0;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
-    visionCamera = new VisionCamera(RobotMap.serialPort1);
+    visionCamera = new VisionCamera(serialPort1);
     commandSuites = new CommandSuites();
     robotConfig = new RobotConfig();
     RobotMap.drive.startAutoOdometry();
     robotConfig.setStartingConfig();
-    RobotMap.drive.initVelocityPIDs();
+    //RobotMap.drive.initVelocityPIDs();
     RobotMap.drive.initAlignmentPID();
-    RobotMap.drive.startAutoOdometry();
+    try {
+			jevois1 = new SerialPort(115200, Port.kUSB);
+			if(jevois1.getBytesReceived()>2){
+				hasCamera = true;
+			}
+			else{
+				hasCamera = false;
+			}
+		} catch (Exception e) {
+			hasCamera = false;
+		}
+		visionCamera= new VisionCamera(Robot.jevois1);
+		ableToSwitch = true;
+		
+		robotConfig.setStartingConfig();
+		camera = CameraServer.getInstance().startAutomaticCapture("VisionCamera1", "/dev/video0");
+		camera.setResolution(320, 240);
+		camera.setFPS(15);
+
+		camera2 = CameraServer.getInstance().startAutomaticCapture("VisionCamera2", "/dev/video1");
+		camera2.setResolution(320, 240);
+		camera2.setFPS(15);
+		RobotMap.visionRelay1.set(Value.kOn);
+	
+
+		server = CameraServer.getInstance().addSwitchedCamera("driverVisionCameras");
+		server.setSource(camera);
+		Shuffleboard.update();
+		SmartDashboard.updateValues(); 
     m_oi = new OI();
   
   }
@@ -60,22 +108,52 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    if(RobotMap.armMaster.getSensorCollection().isFwdLimitSwitchClosed()){
-      SmartDashboard.putBoolean("fwdLimitSwitch", true);
-      SmartDashboard.putBoolean("revLimitSwitch", false);
-    }
-    else if(RobotMap.armMaster.getSensorCollection().isRevLimitSwitchClosed()){
-      SmartDashboard.putBoolean("fwdLimitSwitch", false);
-      SmartDashboard.putBoolean("revLimitSwitch", true);
-    }
-    else{
-      SmartDashboard.putBoolean("fwdLimitSwitch", false);
-      SmartDashboard.putBoolean("revLimitSwitch", false);
-    }
-    SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
-    SmartDashboard.putString("CameraString", visionCamera.getString());
-    //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
-    //SmartDashboard.putNumber("armSpinnyBoy1",RobotMap.arm.mainArmEncoder.getAngle());
+    runCounter++;
+		if(runCounter%10==0){
+			visionCamera.updateVision();
+			SmartDashboard.putNumber("visionAngle", visionCamera.getAngle());
+		}
+		if(runCounter%100==0){
+			double pressure = ((250*RobotMap.preassureSensor.getAverageVoltage())/4.53)-25;
+      SmartDashboard.putNumber("pressure", pressure);
+      SmartDashboard.putString("visionString", visionCamera.getString());
+      SmartDashboard.putNumber("cambytes", jevois1.getBytesReceived());
+      SmartDashboard.putNumber("ultraSonic2", RobotMap.mainUltrasonicSensor2.getDistance());
+			SmartDashboard.putBoolean("hasNavx", RobotMap.navx.isConnected());
+			SmartDashboard.putNumber("getX",RobotMap.drive.getDriveTrainX());
+			SmartDashboard.putNumber("getY",RobotMap.drive.getDriveTrainY());
+			SmartDashboard.putBoolean("hasCamera", hasCamera);
+			SmartDashboard.putNumber("armPosit", RobotMap.arm.getArmAngle());
+			if(byteCount>0){
+				hasCamera = true;
+				changeLightColor1.changeLedColor(0, 1,0);
+			}
+			else{
+				changeLightColor1.changeLedColor(0, 0,1);
+				hasCamera = true;
+			}
+			byteCount = 0;
+		}
+		try{
+			byteCount = byteCount + jevois1.getBytesReceived();
+		}
+		catch(Exception e){
+			hasCamera = false;
+		}
+		if(ButtonMap.switchCamera()&&ableToSwitch){
+			if(cameraBoolean){
+				server.setSource(camera2);
+				cameraBoolean = false;
+			}
+			else if(!cameraBoolean){
+				server.setSource(camera);
+				cameraBoolean = true;
+			}
+			ableToSwitch = false;
+		}
+		else if(!ButtonMap.switchCamera()){
+			ableToSwitch = true;
+		}
   }
   /**
    * This function is called once each time the robot enters Disabled mode.

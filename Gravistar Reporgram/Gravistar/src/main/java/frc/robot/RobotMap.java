@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -17,7 +18,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.SPI.Port;
 import frc.robot.sensors.ArmEncoder;
 import frc.robot.sensors.DriveEncoder;
 import frc.robot.sensors.PWMUltraSonicSensor;
@@ -76,7 +77,7 @@ public class RobotMap {
   public static Relay.Value lightRingOn = Relay.Value.kForward;
   public static Relay.Value lightRingOff = Relay.Value.kReverse;
 
-  public static SerialPort serialPort1 = new SerialPort(115200, Port.kUSB);
+  public static AnalogInput preassureSensor = new AnalogInput(1);
   
 	public static Counter ultraSonic1 = new Counter(0);
 	public static Counter ultraSonic2 = new Counter(1);
@@ -87,6 +88,9 @@ public class RobotMap {
 	public static PWMUltraSonicSensor mainUltrasonicSensor2= new PWMUltraSonicSensor(ultraSonic2);
 	public static PWMUltraSonicSensor mainUltrasonicSensor3=new PWMUltraSonicSensor(ultraSonic3);
 	public static PWMUltraSonicSensor mainUltrasonicSensor4= new PWMUltraSonicSensor(ultraSonic4);
+  
+  public static CANifier canifier1 = new CANifier(0);
+  public static CANifier canifier2 = new CANifier(1);
   
   public static TalonSRX driveMotors[] = {
     RobotMap.leftDriveLead,

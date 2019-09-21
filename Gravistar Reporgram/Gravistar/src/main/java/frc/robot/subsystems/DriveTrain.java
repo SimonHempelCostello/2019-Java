@@ -36,7 +36,7 @@ public class DriveTrain extends Subsystem {
 	private double povValue;
 	private double ratio = 0;
 	private double sensitivity;
-	private double minTurnFactor = 0.4;
+	private double minTurnFactor = 0.5;
   public static DriveEncoder leftMainDrive = new DriveEncoder(RobotMap.leftDriveLead,RobotMap.leftDriveLead.getSelectedSensorPosition(0));
   public static DriveEncoder rightMainDrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
 	private double speed;
@@ -102,15 +102,12 @@ public class DriveTrain extends Subsystem {
 		double rightPower;
 		double differential;
 		
-		throttel = ButtonMap.getDriveThrottle(); 
-		if(throttel ==0){
-			throttel = 0.001;
-		}
-		ratio = Math.abs(1/throttel);
-		povValue = ButtonMap.getPOV();
-		turn = ButtonMap.getRotation();
-		differential = (turn*ratio*sensitivity) + Math.abs(minTurnFactor*turn);
+		throttel = Math.tanh(ButtonMap.getDriveThrottle()); 
 
+		ratio = Math.abs(throttel);
+		turn = ButtonMap.getRotation();
+		differential = turn;
+		SmartDashboard.putNumber("differential", differential);
 		leftPower = (throttel - (differential));
 		rightPower = (throttel + (differential));
 	
@@ -149,7 +146,7 @@ public class DriveTrain extends Subsystem {
 		
     power = 0.35;
     RobotMap.drive.setLowGear();
-    RobotConfig.setDriveMotorsBrake();
+    RobotConfig.setDriveMotorsCoast();
     connected = RobotMap.mainUltrasonicSensor2.isConnected();
     distance = RobotMap.mainUltrasonicSensor2.getDistance();
     if(distance>=1.5&&connected&&distance<7){

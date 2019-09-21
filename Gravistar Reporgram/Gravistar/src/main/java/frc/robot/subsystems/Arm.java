@@ -87,8 +87,9 @@ public class Arm extends Subsystem {
   public void intakeRest(){
     RobotMap.intakeMotor.set(ControlMode.PercentOutput, 0);
   }
-
-
+  public double getArmAngle(){
+    return mainArmEncoder.getAngle();
+  }
   public void zeroArmUP(){
     mainArmEncoder.setForwardLimitSwitchAngle();
   }
