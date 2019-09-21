@@ -60,10 +60,10 @@ public class ButtonMap {
         return oi.operatorController.getBumper(Hand.kRight);
     }
     public static boolean outTakeBall(){
-        return (oi.operatorController.getRawAxis(2)>0.5);
+        return (oi.operatorController.getRawAxis(3)>0.5);
     }
     public static boolean inTakeBall(){
-        return (oi.operatorController.getRawAxis(3)>0.5);
+        return (oi.operatorController.getRawAxis(2)>0.5);
     }
 
     

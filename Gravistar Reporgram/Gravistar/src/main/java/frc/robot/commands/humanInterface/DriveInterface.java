@@ -48,6 +48,7 @@ public class DriveInterface extends Command {
 		}
 		else{
 			RobotMap.visionRelay1.set(RobotMap.lightRingOff);
+			Robot.changeLightColor.changeLedColor(1, 0, 0);
 			RobotMap.drive.arcadeDrive();
 		}
 

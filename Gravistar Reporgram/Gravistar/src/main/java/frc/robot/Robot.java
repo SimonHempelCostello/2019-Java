@@ -47,7 +47,6 @@ public class Robot extends TimedRobot {
 	private boolean cameraBoolean = false;
 	public static ChangeLightColor changeLightColor = new ChangeLightColor(1,0, 0, RobotMap.canifier1);
 	public static ChangeLightColor changeLightColor1 = new ChangeLightColor(0,0, 0, RobotMap.canifier2);
-  private SerialPort serialPort1 = new SerialPort(115200, Port.kUSB);
 	public static VisionCamera visionCamera;
 	public static SerialPort jevois1;
 	private double byteCount;
@@ -59,7 +58,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    visionCamera = new VisionCamera(serialPort1);
     commandSuites = new CommandSuites();
     robotConfig = new RobotConfig();
     RobotMap.drive.startAutoOdometry();
@@ -117,7 +115,6 @@ public class Robot extends TimedRobot {
 			double pressure = ((250*RobotMap.preassureSensor.getAverageVoltage())/4.53)-25;
       SmartDashboard.putNumber("pressure", pressure);
       SmartDashboard.putString("visionString", visionCamera.getString());
-      SmartDashboard.putNumber("cambytes", jevois1.getBytesReceived());
       SmartDashboard.putNumber("ultraSonic2", RobotMap.mainUltrasonicSensor2.getDistance());
 			SmartDashboard.putBoolean("hasNavx", RobotMap.navx.isConnected());
 			SmartDashboard.putNumber("getX",RobotMap.drive.getDriveTrainX());

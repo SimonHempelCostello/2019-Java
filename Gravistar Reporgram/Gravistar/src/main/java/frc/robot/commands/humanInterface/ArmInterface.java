@@ -66,6 +66,9 @@ public class ArmInterface extends Command {
     if(Math.abs(ButtonMap.armManualControlValue())>0.2){
       RobotMap.arm.setArmPercentPower(ButtonMap.armManualControlValue());
     }
+    else if(RobotMap.arm.getArmAngle()<10&&desiredAngle == RobotStats.armRestingAngle){
+      RobotMap.arm.setArmPercentPower(-0.1);
+    }
     else{
       RobotMap.arm.setArmPostion(desiredAngle);
     }

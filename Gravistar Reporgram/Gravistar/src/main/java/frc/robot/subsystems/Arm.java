@@ -80,10 +80,10 @@ public class Arm extends Subsystem {
   }
   
   public void outTakeBall(){
-    RobotMap.intakeMotor.set(ControlMode.PercentOutput, 1.0);
+    RobotMap.intakeMotor.set(ControlMode.PercentOutput,-1.0);
   }
   public void inTakeBall(){
-    RobotMap.intakeMotor.set(ControlMode.PercentOutput, -1.0);
+    RobotMap.intakeMotor.set(ControlMode.PercentOutput, 0.7);
   }
   public void intakeRest(){
     RobotMap.intakeMotor.set(ControlMode.PercentOutput, 0);
