@@ -34,6 +34,8 @@ public class ArmInterface extends Command {
   protected void initialize() {
     grabHatch = new GrabHatch();
     placeHatch = new PlaceHatch();
+    RobotMap.arm.setHatchMechIn();
+    RobotMap.arm.tenseHatchGrabbers();
     shouldFinish = false;
   }
 
@@ -67,10 +69,10 @@ public class ArmInterface extends Command {
     else{
       RobotMap.arm.setArmPostion(desiredAngle);
     }
-    if(ButtonMap.releaseHatch()){
+    if(ButtonMap.releaseHatch()&&!grabHatch.isRunning()&&!placeHatch.isRunning()){
       placeHatch.start();
     }
-    else if(ButtonMap.grabHatch()){
+    else if(ButtonMap.grabHatch()&&!placeHatch.isRunning()&&!grabHatch.isRunning()){
       grabHatch.start();
     }
     if(ButtonMap.outTakeBall()){

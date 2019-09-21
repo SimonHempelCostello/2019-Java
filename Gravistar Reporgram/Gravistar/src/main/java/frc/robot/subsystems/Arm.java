@@ -78,6 +78,7 @@ public class Arm extends Subsystem {
   public void releaseHatchGrabbers(){
     releaseHatchGrabber.start();
   }
+  
   public void outTakeBall(){
     RobotMap.intakeMotor.set(ControlMode.PercentOutput, 1.0);
   }

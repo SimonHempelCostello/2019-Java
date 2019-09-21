@@ -138,6 +138,7 @@ public class DriveTrain extends Subsystem {
     RobotMap.drive.setLowGear();
 		Robot.visionCamera.updateVision();
 		if(Timer.getFPGATimestamp()-Robot.visionCamera.lastParseTime>0.25){
+			
 			alignmentPID.updatePID(0);
 		}
 		else{
