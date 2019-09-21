@@ -14,8 +14,8 @@ import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Waypoint;
 
 public class PathList {
-  private File testFile1 = new File("/home/lvuser/deploy/test3.pf1.csv");
-  private File testFile2 = new File("/home/lvuser/deploy/test4.pf1.csv");
+  private File testFile1 = new File("/home/lvuser/deploy/test1.pf1.csv");
+  private File testFile2 = new File("/home/lvuser/deploy/test2.pf1.csv");
 
   public PathSetup test2Path;
   public PathSetup test1Path;

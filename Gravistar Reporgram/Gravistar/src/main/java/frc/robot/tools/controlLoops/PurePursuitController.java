@@ -100,17 +100,12 @@ public class PurePursuitController extends Command {
 			System.out.println("odometry"+RobotMap.drive.getDriveTrainX());
 			odometry.setX(RobotMap.drive.getDriveTrainX());
 			odometry.setY(RobotMap.drive.getDriveTrainY());
-			odometry.setTheta(RobotMap.drive.getDriveTrainHeading());
+			//odometry.setTheta(RobotMap.drive.getDriveTrainHeading());
 		}
 		else{
 			odometry.setX(chosenPath.getMainPath().get(0).x);
 			odometry.setY(chosenPath.getMainPath().get(0).y);
-		}
-		if(startingTheta!=0){
-			odometry.setTheta(startingTheta);
-		}
-		else{
-			odometry.setTheta(0);
+			odometry.setTheta(chosenPath.getMainPath().get(0).heading);
 		}
 		if(chosenPath.getMainPath().get(0).x >= chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).x){
 			if(chosenPath.getReversed()){
@@ -261,7 +256,7 @@ public class PurePursuitController extends Command {
 		double leftVelocity;
 		double rightVelocity;
 		double v;
-		if(Math.abs(targetVelocity) <1.25){
+		if(Math.abs(targetVelocity) <1.25&&(chosenPath.getMainPath().length()-closestSegment)>20){
 			v = 1.25;
 		}
 		else{

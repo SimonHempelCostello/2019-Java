@@ -10,7 +10,9 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,13 +35,15 @@ public class Robot extends TimedRobot {
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
   public static VisionCamera visionCamera;
+  public static SerialPort serialPort1 = new SerialPort(115200, Port.kUSB);
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
-    visionCamera = new VisionCamera(RobotMap.serialPort1);
+    visionCamera = new VisionCamera(serialPort1);
     commandSuites = new CommandSuites();
     robotConfig = new RobotConfig();
     RobotMap.drive.startAutoOdometry();
