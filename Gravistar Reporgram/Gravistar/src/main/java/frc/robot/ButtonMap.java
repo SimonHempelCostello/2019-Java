@@ -65,6 +65,12 @@ public class ButtonMap {
     public static boolean inTakeBall(){
         return (oi.operatorController.getRawAxis(2)>0.5);
     }
+    public static double climbingMotorPower(){
+        return (oi.operatorController.getRawAxis(5));
+    }
+    public static boolean enableClimber(){
+        return oi.operatorController.getStartButton();
+    }
 
     
     

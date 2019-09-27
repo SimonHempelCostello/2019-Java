@@ -63,6 +63,9 @@ public class RobotMap {
   
   public static int intakeMotorID = 7;
   
+  public static int climbingMechLeadTalonID = 8;
+	public static int climbingMechFollowerTalonID = 9;
+  
   public static TalonSRX leftDriveLead = new TalonSRX(leftMasterTalonID); // blue encoder
   public static TalonSRX rightDriveLead = new TalonSRX(rightMasterTalonID); // red
 
@@ -72,7 +75,10 @@ public class RobotMap {
   public static TalonSRX armMaster = new TalonSRX(armMasterID);
   public static TalonSRX armFollower = new TalonSRX(armFollowerID);
 
-	public static TalonSRX intakeMotor = new TalonSRX(intakeMotorID);
+  public static TalonSRX intakeMotor = new TalonSRX(intakeMotorID);
+  
+  public static TalonSRX climbingMechLeadTalon = new TalonSRX(climbingMechLeadTalonID);
+	public static TalonSRX climbingMechFollowerTalon = new TalonSRX(climbingMechFollowerTalonID);
   
   public static Relay.Value lightRingOn = Relay.Value.kForward;
   public static Relay.Value lightRingOff = Relay.Value.kReverse;

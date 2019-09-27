@@ -18,12 +18,14 @@ import frc.robot.RobotStats;
 import frc.robot.commands.controls.GrabHatch;
 import frc.robot.commands.controls.PlaceHatch;
 import frc.robot.commands.controls.GrabHatch;
+import frc.robot.commands.controls.ClimbMechanismController;
 
 public class ArmInterface extends Command {
   private boolean shouldFinish;
   private double desiredAngle  = 105;
   private GrabHatch grabHatch;
   private PlaceHatch placeHatch;
+  private ClimbMechanismController climbMechanismController;
   public ArmInterface() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -34,7 +36,9 @@ public class ArmInterface extends Command {
   protected void initialize() {
     grabHatch = new GrabHatch();
     placeHatch = new PlaceHatch();
+    climbMechanismController = new ClimbMechanismController();
     RobotMap.arm.setHatchMechIn();
+    desiredAngle = RobotMap.arm.getArmAngle();
     RobotMap.arm.tenseHatchGrabbers();
     shouldFinish = false;
   }
@@ -61,7 +65,7 @@ public class ArmInterface extends Command {
       desiredAngle = RobotStats.armUpAngle;
     }
     else if(Math.abs(ButtonMap.armManualControlValue())>0.2){
-      desiredAngle = RobotMap.arm.mainArmEncoder.getAngle();
+      desiredAngle = RobotMap.arm.getArmAngle();
     }
     if(Math.abs(ButtonMap.armManualControlValue())>0.2){
       RobotMap.arm.setArmPercentPower(ButtonMap.armManualControlValue());
@@ -86,6 +90,10 @@ public class ArmInterface extends Command {
     }
     else{
       RobotMap.arm.intakeRest();
+    }
+
+    if(ButtonMap.enableClimber()){
+      climbMechanismController.start();
     }
     
 
