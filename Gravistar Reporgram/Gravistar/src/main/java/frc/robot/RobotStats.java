@@ -29,6 +29,7 @@ public class RobotStats {
 	public static double armUpAngle =105;
     public static double armRestingAngle = 0;
     public static double armOutTakeAngle = 70;
+    public static double armUpOutTakeAngle = 89;
     public static double armKfFactor = 0.0;
 
 }

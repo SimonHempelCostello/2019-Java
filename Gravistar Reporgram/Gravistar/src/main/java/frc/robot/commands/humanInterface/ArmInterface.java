@@ -39,6 +39,7 @@ public class ArmInterface extends Command {
     climbMechanismController = new ClimbMechanismController();
     RobotMap.arm.setHatchMechIn();
     desiredAngle = RobotMap.arm.getArmAngle();
+    RobotMap.arm.setArmPostion(desiredAngle);
     RobotMap.arm.tenseHatchGrabbers();
     shouldFinish = false;
   }
@@ -63,6 +64,9 @@ public class ArmInterface extends Command {
     }
     else if(ButtonMap.armUp()){
       desiredAngle = RobotStats.armUpAngle;
+    }
+    else if(ButtonMap.armUpOuttake()){
+      desiredAngle = RobotStats.armUpOutTakeAngle;
     }
     else if(Math.abs(ButtonMap.armManualControlValue())>0.2){
       desiredAngle = RobotMap.arm.getArmAngle();

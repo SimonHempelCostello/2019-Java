@@ -50,6 +50,9 @@ public class ButtonMap {
     public static boolean armResting(){
         return oi.operatorController.getAButton();  
     }
+    public static boolean armUpOuttake(){
+        return oi.operatorController.getBButton();
+    }
     public static double armManualControlValue(){
         return oi.operatorController.getRawAxis(1);
     }
