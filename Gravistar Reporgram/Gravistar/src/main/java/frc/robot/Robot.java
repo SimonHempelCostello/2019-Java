@@ -46,7 +46,6 @@ public class Robot extends TimedRobot {
     visionCamera = new VisionCamera(serialPort1);
     commandSuites = new CommandSuites();
     robotConfig = new RobotConfig();
-    RobotMap.drive.startAutoOdometry(0,2,0);
     robotConfig.setStartingConfig();
     RobotMap.drive.initVelocityPIDs();
     RobotMap.drive.initAlignmentPID();
@@ -75,8 +74,6 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("fwdLimitSwitch", false);
       SmartDashboard.putBoolean("revLimitSwitch", false);
     }
-    SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
-    SmartDashboard.putNumber("Roboty", RobotMap.drive.getDriveTrainY());
 
     SmartDashboard.putString("CameraString", visionCamera.getString());
     //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
@@ -128,6 +125,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
+    SmartDashboard.putNumber("Roboty", RobotMap.drive.getDriveTrainY());
     Scheduler.getInstance().run();
   }
   @Override

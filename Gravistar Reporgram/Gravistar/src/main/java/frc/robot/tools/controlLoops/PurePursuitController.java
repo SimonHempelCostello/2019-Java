@@ -6,12 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.tools.controlLoops;
-
-
-
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -79,7 +74,7 @@ public class PurePursuitController extends Command {
 		lookAheadDistance = lookAhead;  
 		k = kValue;  
 		endError = distoEndError;
-		useOutsideOdometry = outsideOdometry;
+		useOutsideOdometry = useOutsideOdometry;
 		requires(RobotMap.drive);
 
 		// Use requires() here to declare subsystem dependencies
@@ -97,10 +92,9 @@ public class PurePursuitController extends Command {
 		odometry.zero();
 		odometry.start();
 		if(useOutsideOdometry){
-			System.out.println("odometry"+RobotMap.drive.getDriveTrainX());
 			odometry.setX(RobotMap.drive.getDriveTrainX());
 			odometry.setY(RobotMap.drive.getDriveTrainY());
-			//odometry.setTheta(RobotMap.drive.getDriveTrainHeading());
+			odometry.setTheta(RobotMap.drive.getDriveTrainHeading());
 		}
 		else{
 			odometry.setX(chosenPath.getMainPath().get(0).x);
@@ -115,7 +109,6 @@ public class PurePursuitController extends Command {
 			odometry.setReversed(true);
 			}
 		}
-		System.out.println(odometry.getX());
 		distToEndVector = new Vector(12,12);
 		lookAheadPoint = new Point(0, 0);
 		closestPoint = new Point(0,0);
@@ -141,7 +134,7 @@ public class PurePursuitController extends Command {
 		shouldRunAlgorithm = true;
 		curveAdjustedVelocity = 0;
 		pathNotifier = new Notifier(new PathRunnable());
-		pathNotifier.startPeriodic(0.005);
+		pathNotifier.startPeriodic(0.001);
     }
  	private class PathRunnable implements Runnable{
 		public void run(){
@@ -154,7 +147,10 @@ public class PurePursuitController extends Command {
 		}
   	}
   	private void purePursuitAlgorithm(){
-		for(int i = startingNumber; i<chosenPath.getMainPath().length();i++){        
+		odometry.setX(RobotMap.drive.getDriveTrainX());
+
+		odometry.setY(RobotMap.drive.getDriveTrainY());
+		for(int i = startingNumber; i<chosenPath.getMainPath().length()-1;i++){        
 			deltaX = chosenPath.getMainPath().get(i).x-odometry.getX();
 			deltaY = chosenPath.getMainPath().get(i).y-odometry.getY();
 			distToPoint = Math.sqrt(Math.pow(deltaX, 2)+Math.pow(deltaY, 2));
@@ -227,8 +223,7 @@ public class PurePursuitController extends Command {
 		startingNumberLA = (int)partialPointIndex;
 		lastLookAheadPoint = lookAheadPoint;
 		findRobotCurvature();
-		curveAdjustedVelocity = Math.min(Math.abs(k/desiredRobotCurvature),chosenPath.getMainPath().get(closestSegment).velocity);
-		setWheelVelocities(curveAdjustedVelocity, desiredRobotCurvature);
+		setWheelVelocities(chosenPath.getMainPath().get(closestSegment+1).velocity, desiredRobotCurvature);
 		endThetaError = Pathfinder.boundHalfDegrees((Math.toDegrees(chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).heading)-odometry.gettheta()));
   	} 
   	public void setOdometryX(double X){
@@ -256,12 +251,13 @@ public class PurePursuitController extends Command {
 		double leftVelocity;
 		double rightVelocity;
 		double v;
-		if(Math.abs(targetVelocity) <1.25&&(chosenPath.getMainPath().length()-closestSegment)>20){
-			v = 1.25;
+		if(closestSegment <10){
+			v = 1.2;
 		}
 		else{
 			v = targetVelocity;
 		}
+		
 		double c = curvature;
 		if(chosenPath.getReversed()){
 			v = -v;
@@ -302,7 +298,7 @@ public class PurePursuitController extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		if(chosenPath.getMainPath().length()-closestSegment<=4){
+		if(chosenPath.getMainPath().length()-closestSegment<=2){
 			return true;
 		} 
 		else{
@@ -313,7 +309,7 @@ public class PurePursuitController extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		System.out.println("done");
+		System.out.println(RobotMap.drive.getDriveTrainX());
 		pathNotifier.stop();
 		shouldRunAlgorithm = false;
 		odometry.endOdmetry();
