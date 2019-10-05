@@ -221,7 +221,7 @@ public class PurePursuitController extends Command {
 		distToEndVector.setY(chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).y-odometry.getY());
 		SmartDashboard.putNumber("distoend", distToEndVector.length());
 		SmartDashboard.putNumber("x", odometry.getX());
-		SmartDashboard.putNumber("closestSegment", closestSegment);
+		SmartDashboard.putNumber("closestSegment", chosenPath.getMainPath().length()-closestSegment);
 		SmartDashboard.putNumber("y",odometry.getY());
 		SmartDashboard.putNumber("theta", odometry.gettheta());
 		startingNumberLA = (int)partialPointIndex;
@@ -302,7 +302,7 @@ public class PurePursuitController extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		if(closestSegment >= chosenPath.getMainPath().length()-2){
+		if(chosenPath.getMainPath().length()-closestSegment<=4){
 			return true;
 		} 
 		else{

@@ -68,10 +68,16 @@ public class ArmInterface extends Command {
       RobotMap.arm.setArmPostion(desiredAngle);
     }
     if(ButtonMap.releaseHatch()){
-      placeHatch.start();
+      RobotMap.arm.releaseHatchGrabbers();
     }
-    else if(ButtonMap.grabHatch()){
-      grabHatch.start();
+    else{
+      RobotMap.arm.tenseHatchGrabbers();
+    }
+    if(ButtonMap.grabHatch()){
+     RobotMap.arm.setHatchMechOut();
+    }
+    else{
+      RobotMap.arm.setHatchMechIn();
     }
     if(ButtonMap.outTakeBall()){
       RobotMap.arm.outTakeBall();

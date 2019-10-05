@@ -122,7 +122,7 @@ public class Odometry extends Command {
       if(isReversed){
         leftSideNext = leftDriveEncoder.getDistance();
         rightSideNext = rightDriveEncoder.getDistance();
-        thetaNext = navx.currentYaw();
+        thetaNext = navx.currentReverseYaw();
         leftDelta = -(leftSideNext-leftSide);
         rightDelta = -(rightSideNext-rightSide);
         centerDelta = (leftDelta+rightDelta)/2;

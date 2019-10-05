@@ -35,7 +35,6 @@ public class DriveInterface extends Command {
 	protected void initialize() {
 		shouldFinish = false;
 		RobotConfig.setDriveMotorsBrake();
-		RobotMap.drive.startAutoOdometry();
 		RobotMap.drive.initVelocityPIDs();
 	}
 

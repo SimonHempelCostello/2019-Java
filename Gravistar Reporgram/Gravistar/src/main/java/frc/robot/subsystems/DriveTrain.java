@@ -58,8 +58,11 @@ public class DriveTrain extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
 	}
-	public void startAutoOdometry(){
+	public void startAutoOdometry(double x, double y, double theta){
 		autoOdometry = new Odometry(false);
+		autoOdometry.setX(x);
+		autoOdometry.setY(y);
+		autoOdometry.setTheta(theta);
 		autoOdometry.start();
 	};
 	public double getDriveTrainX(){

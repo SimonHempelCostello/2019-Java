@@ -46,11 +46,10 @@ public class Robot extends TimedRobot {
     visionCamera = new VisionCamera(serialPort1);
     commandSuites = new CommandSuites();
     robotConfig = new RobotConfig();
-    RobotMap.drive.startAutoOdometry();
+    RobotMap.drive.startAutoOdometry(0,2,0);
     robotConfig.setStartingConfig();
     RobotMap.drive.initVelocityPIDs();
     RobotMap.drive.initAlignmentPID();
-    RobotMap.drive.startAutoOdometry();
     m_oi = new OI();
   
   }
@@ -77,6 +76,8 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("revLimitSwitch", false);
     }
     SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
+    SmartDashboard.putNumber("Roboty", RobotMap.drive.getDriveTrainY());
+
     SmartDashboard.putString("CameraString", visionCamera.getString());
     //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
     //SmartDashboard.putNumber("armSpinnyBoy1",RobotMap.arm.mainArmEncoder.getAngle());
@@ -117,7 +118,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     commandSuites.startAutoCommands();
-    RobotMap.drive.startAutoOdometry();
+    RobotMap.drive.startAutoOdometry(0,2,0);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.start();
     }
@@ -132,6 +133,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     commandSuites.startTeleopCommands();
+
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
