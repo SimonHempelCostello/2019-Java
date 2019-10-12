@@ -57,24 +57,28 @@ public class PurePursuitController extends Command {
 	public double endThetaError;
 	private boolean useOutsideOdometry;
 	private boolean shouldEnd;
+	private boolean odometryDirection;
   	//no carried over position information
-  	public PurePursuitController(PathSetup path, double lookAhead, double kValue, double distoEndError){
+  	public PurePursuitController(PathSetup path, double lookAhead, double kValue){
 		chosenPath = path;
 		lookAheadDistance = lookAhead;  
 		k = kValue;  
-		endError = distoEndError;
 		requires(RobotMap.drive);
 		useOutsideOdometry = false;
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
   	}
   	//for carried over angle
-  	public PurePursuitController(PathSetup path, double lookAhead, double kValue, double distoEndError, boolean outsideOdometry){
+  	public PurePursuitController(PathSetup path, double lookAhead, double kValue, boolean outsideOdometry, boolean robotAbsoluteDirection){
 		chosenPath = path;
 		lookAheadDistance = lookAhead;  
 		k = kValue;  
-		endError = distoEndError;
-		useOutsideOdometry = useOutsideOdometry;
+		useOutsideOdometry = outsideOdometry;
+		//robot absolute direction describes the direction of robot movemnt for which x increases positively,
+		//if robotAbsoluteDirection is true, assuming a theta of 0, negative drivetrain values on both side will lead to x increasing
+		//if robotAbsoluteDirection is false, assuming a theta of 0, positive drivetrain values on both sides will lead to x increasing,
+		//this way the robot can run any path either forward or reversed, as long as robotAbsoluteDirection remains constant.
+		odometryDirection = robotAbsoluteDirection;
 		requires(RobotMap.drive);
 
 		// Use requires() here to declare subsystem dependencies
@@ -86,8 +90,8 @@ public class PurePursuitController extends Command {
   	@Override
   	protected void initialize() {
 		shouldEnd = false;
-		odometry = new Odometry(chosenPath.getReversed());
-	  
+		odometry = new Odometry(odometryDirection);
+		RobotMap.drive.setOdometryReversed(odometryDirection);
 
 		odometry.zero();
 		odometry.start();
@@ -101,14 +105,7 @@ public class PurePursuitController extends Command {
 			odometry.setY(chosenPath.getMainPath().get(0).y);
 			odometry.setTheta(chosenPath.getMainPath().get(0).heading);
 		}
-		if(chosenPath.getMainPath().get(0).x >= chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).x){
-			if(chosenPath.getReversed()){
-			odometry.setReversed(false);
-			}
-			else{
-			odometry.setReversed(true);
-			}
-		}
+		
 		distToEndVector = new Vector(12,12);
 		lookAheadPoint = new Point(0, 0);
 		closestPoint = new Point(0,0);

@@ -42,7 +42,7 @@ public class DriveTrain extends Subsystem {
 	private double speed;
   private double f = 0.332;
   private double p = 0.715;
-  private double i = 0.0000013;
+  private double i = 0.000013;
   private double d = 13.5;
 	private int profile = 0;
 	private Odometry autoOdometry;
@@ -74,6 +74,20 @@ public class DriveTrain extends Subsystem {
 	public double getDriveTrainHeading(){
 		return autoOdometry.gettheta();
 	}
+
+	public void setDriveTrainX(double x){
+		 autoOdometry.setX(x);
+	}
+	public void setDriveTrainY(double y){
+		 autoOdometry.setY(y);
+	}
+	public void setDriveTrainHeading(double theta){
+		 autoOdometry.setTheta(theta);
+	}
+	public void setOdometryReversed(boolean reversed){
+		 autoOdometry.setReversed(reversed);
+	}
+
   public void setLowGear(){
     RobotMap.shifters.set(RobotMap.lowGear);
   }

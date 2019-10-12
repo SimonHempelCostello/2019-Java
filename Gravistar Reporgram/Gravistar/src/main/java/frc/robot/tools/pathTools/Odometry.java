@@ -127,7 +127,7 @@ public class Odometry extends Command {
         rightDelta = -(rightSideNext-rightSide);
         centerDelta = (leftDelta+rightDelta)/2;
         xNext = x-centerDelta*Math.cos(Math.toRadians(thetaNext));
-        yNext = y+centerDelta*Math.sin(Math.toRadians(thetaNext));
+        yNext = y-centerDelta*Math.sin(Math.toRadians(thetaNext));
         x = xNext;
         y = yNext;
         theta = thetaNext;

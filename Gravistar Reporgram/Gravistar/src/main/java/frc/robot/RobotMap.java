@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Relay;
@@ -77,12 +78,13 @@ public class RobotMap {
   public static Relay.Value lightRingOff = Relay.Value.kReverse;
 
   
-	public static Counter ultraSonic1 = new Counter(0);
-	public static Counter ultraSonic2 = new Counter(1);
+//	public static Counter ultraSonic1 = new Counter(0);
+  public static Counter ultraSonic2 = new Counter(1);
+  public static DigitalInput digitalInput = new DigitalInput(0);
 	public static Counter ultraSonic3 = new Counter(2);
   public static Counter ultraSonic4 = new Counter(3);
 
-  public static PWMUltraSonicSensor mainUltrasonicSensor1=new PWMUltraSonicSensor(ultraSonic1);
+ // public static PWMUltraSonicSensor mainUltrasonicSensor1=new PWMUltraSonicSensor(ultraSonic1);
 	public static PWMUltraSonicSensor mainUltrasonicSensor2= new PWMUltraSonicSensor(ultraSonic2);
 	public static PWMUltraSonicSensor mainUltrasonicSensor3=new PWMUltraSonicSensor(ultraSonic3);
 	public static PWMUltraSonicSensor mainUltrasonicSensor4= new PWMUltraSonicSensor(ultraSonic4);
