@@ -50,10 +50,6 @@ public class PurePursuitController extends Command {
 	private double curveAdjustedVelocity;
 	private double k;
 	private boolean shouldRunAlgorithm;
-	private double endError;
-	private double startingTheta = 0;
-	private double startingX = 0;
-	private double startingY = 0;
 	public double endThetaError;
 	private boolean useOutsideOdometry;
 	private boolean shouldEnd;
