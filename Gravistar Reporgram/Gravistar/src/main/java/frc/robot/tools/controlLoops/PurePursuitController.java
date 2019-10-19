@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.tools.controlLoops;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,8 +15,6 @@ import frc.robot.tools.pathTools.PathSetup;
 import frc.robot.tools.pathTools.Odometry;
 import frc.robot.tools.math.Point;
 import frc.robot.tools.math.Vector;
-import frc.robot.Robot;
-import frc.robot.RobotConfig;
 import jaci.pathfinder.Pathfinder;
 
 public class PurePursuitController extends Command {
@@ -216,7 +213,8 @@ public class PurePursuitController extends Command {
 		startingNumberLA = (int)partialPointIndex;
 		lastLookAheadPoint = lookAheadPoint;
 		findRobotCurvature();
-		setWheelVelocities(chosenPath.getMainPath().get(closestSegment+1).velocity, desiredRobotCurvature);
+		curveAdjustedVelocity = Math.min(Math.abs(k/desiredRobotCurvature),chosenPath.getMainPath().get(closestSegment).velocity);
+		setWheelVelocities(curveAdjustedVelocity, desiredRobotCurvature);
 		endThetaError = Pathfinder.boundHalfDegrees((Math.toDegrees(chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).heading)-odometry.gettheta()));
   	} 
   	public void setOdometryX(double X){

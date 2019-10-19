@@ -164,7 +164,7 @@ public class DriveTrain extends Subsystem {
 			alignmentPID.updatePID(Robot.visionCamera.getAngle());
 		}
 		
-    power = 0.35;
+    power = 0.0;
     RobotMap.drive.setLowGear();
     RobotConfig.setDriveMotorsBrake();
     connected = RobotMap.mainUltrasonicSensor2.isConnected();
