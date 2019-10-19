@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.sensors.VisionCamera;
+import frc.robot.tools.controlLoops.CubicInterpolationFollower;
 import frc.robot.tools.pathTools.Odometry;
 import frc.robot.tools.pathTools.PathList;
 
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
   public static VisionCamera visionCamera;
+  private CubicInterpolationFollower cubicFollower = new CubicInterpolationFollower(4, 18, 4, 1.2, 1, 0, 1, 0, 4);
   public static SerialPort serialPort1 = new SerialPort(115200, Port.kUSB);
 
   /**
@@ -50,7 +52,8 @@ public class Robot extends TimedRobot {
     RobotMap.drive.initVelocityPIDs();
     RobotMap.drive.initAlignmentPID();
     m_oi = new OI();
-  
+    cubicFollower.start();
+    cubicFollower.createPathFunction(0, 4);
   }
   /**
    * This function is called every robot packet, no matter the mode. Use

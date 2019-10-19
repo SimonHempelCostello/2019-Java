@@ -52,13 +52,11 @@ dependencies {
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
-
+    compile 'gov.nist.math:jama:1.0.3'
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     testCompile 'junit:junit:4.12'
     implementation 'com.github.Oblarg:command-rewrite-jitpack:3b72842'
-
-
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
