@@ -36,7 +36,6 @@ public class Robot extends TimedRobot {
   private CommandSuites commandSuites;
   private RobotConfig robotConfig;
   public static VisionCamera visionCamera;
-  private CubicInterpolationFollower cubicFollower = new CubicInterpolationFollower(4, 18, 4, 1.2, 1, 0, 1, 0, 4);
   public static SerialPort serialPort1 = new SerialPort(115200, Port.kUSB);
 
   /**
@@ -52,8 +51,6 @@ public class Robot extends TimedRobot {
     RobotMap.drive.initVelocityPIDs();
     RobotMap.drive.initAlignmentPID();
     m_oi = new OI();
-    cubicFollower.start();
-    cubicFollower.createPathFunction(0, 4);
   }
   /**
    * This function is called every robot packet, no matter the mode. Use
@@ -118,7 +115,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     commandSuites.startAutoCommands();
-    RobotMap.drive.startAutoOdometry(0,2,0);
+    RobotMap.drive.startAutoOdometry(0,0,0);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.start();
     }

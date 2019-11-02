@@ -10,6 +10,7 @@ package frc.robot;
 import frc.robot.commands.autos.testAuto;
 import frc.robot.commands.humanInterface.ArmInterface;
 import frc.robot.commands.humanInterface.DriveInterface;
+import frc.robot.tools.controlLoops.CubicInterpolationFollower;
 import frc.robot.tools.controlLoops.VelocityPID;
 
 /**
@@ -19,14 +20,14 @@ public class CommandSuites {
     public DriveInterface driveInterface;
     public ArmInterface armInterface;
     public testAuto basicTestAuto;
+    private CubicInterpolationFollower cubicFollower;
     public CommandSuites(){
         armInterface = new ArmInterface();
         driveInterface = new DriveInterface();
+        cubicFollower = new CubicInterpolationFollower(0, 0, 3, 1, 0, 0, 0, 0, 4,2.0);
     }
     public void startAutoCommands(){
-        basicTestAuto = new testAuto();
-        basicTestAuto.start();
-
+        cubicFollower.start();
     }
     public void endAutoCommands(){
 
