@@ -7,8 +7,11 @@
 
 package frc.robot.tools.controlLoops;
 
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
 import frc.robot.tools.math.Point;
@@ -41,8 +44,11 @@ public class CubicInterpolationFollower extends Command {
   private double pathDistance;
   private double velocity;
   private Vector distToMidPoint;
-  private Vector traveledDistanceVector;
+  private Vector distToEndPoint;
   private double lookAheadDistance;
+  private boolean shouldRunAlgorithm;
+  private Vector traveledDistanceVector;
+  private Notifier pathNotifier;
 
   public CubicInterpolationFollower(double initialXPot, double initialYPot, double finalXPot, double finalYPot, double initialXVel, double initialYVel, double finalXVel, double finalYVel, double timeSpan, double laDistance) {
     xPI = initialXPot;
@@ -67,10 +73,16 @@ public class CubicInterpolationFollower extends Command {
     createPathFunction(0, deltaT);
     midPoint = new Point((xPF+xPI)/2, (yPF+yPI)/2);
     finalPoint = new Point(xPF, xPI);
+    distToEndPoint = new Vector(xPF-RobotMap.drive.getDriveTrainX(), yPF - RobotMap.drive.getDriveTrainY());
     distToMidPoint = new Vector(midPoint.getXPos()-RobotMap.drive.getDriveTrainX(), midPoint.getYPos()-RobotMap.drive.getDriveTrainY());
     pathDistance = Math.sqrt(Math.pow(xPF-xPI,2)+Math.pow(yPF-yPI,2));
-    lookAheadPoint = new Point(0,0);
     traveledDistanceVector = new Vector(0,0);
+    lookAheadPoint = new Point(0,0);
+    shouldRunAlgorithm = true;
+    pathNotifier = new Notifier(new PathRunnable());
+    pathNotifier.startPeriodic(0.0005);
+    System.out.println( xFunctionMatrix.get(0, 0) +" + " + xFunctionMatrix.get(1,0)+"t + " + xFunctionMatrix.get(2,0)+"t^2 + " + xFunctionMatrix.get(3,0)+"t^3");
+    System.out.println( yFunctionMatrix.get(0, 0) +" + " + yFunctionMatrix.get(1,0)+"t + " + yFunctionMatrix.get(2,0)+"t^2 + " + yFunctionMatrix.get(3,0)+"t^3");
   }
   public void createPathFunction(double initialTime, double finalTime){
     xPositionAndVelocityMatrix = new Matrix(4, 1);
@@ -106,11 +118,11 @@ public class CubicInterpolationFollower extends Command {
   public Point getDesiredPosition(double time){
     double xPoint;
     double yPoint;
-    if(time<initialTime){
+    if(time<0){
       desiredPoint = new Point(xPI, yPI);
       return desiredPoint;
     }
-    else if(time>finalTime){
+    else if(time>deltaT){
       desiredPoint = new Point(xPF, yPF);
       return desiredPoint;
     }
@@ -164,7 +176,7 @@ public class CubicInterpolationFollower extends Command {
     double testValue = 1;
     double numerator;
     double denominator;
-    for(int i = 0; i<6; i++){
+    for(int i = 0; i<8; i++){
       numerator = (Math.pow(RobotMap.drive.getDriveTrainX()-getdesiredXPosition(testValue),2)+Math.pow(RobotMap.drive.getDriveTrainY()-getdesiredYPosition(testValue),2)-Math.pow(lookAheadDistance, 2));
       denominator = (2*(RobotMap.drive.getDriveTrainX()-getdesiredXPosition(testValue))*(-getdeisredXVelocity(testValue))+2*(RobotMap.drive.getDriveTrainY()-getdesiredYPosition(testValue))*(-getdesiredYVelocity(testValue)));
       testValue = testValue -(numerator/denominator);
@@ -198,25 +210,34 @@ public class CubicInterpolationFollower extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    lookAheadPoint = getDesiredPosition(findLookAheadPoint());
-    findRobotCurvature();
-    traveledDistanceVector.setX(RobotMap.drive.getDriveTrainX()-xPI); 
-    traveledDistanceVector.setY(RobotMap.drive.getDriveTrainY()-yPI);
     distToMidPoint.setX(midPoint.getXPos()-RobotMap.drive.getDriveTrainX());
     distToMidPoint.setY(midPoint.getYPos()-RobotMap.drive.getDriveTrainY());
-    velocity = -
-    (distToMidPoint.length()-pathDistance/2)*(distToMidPoint.length()+pathDistance/2);
-    if(traveledDistanceVector.length()<0.1){
+    traveledDistanceVector.setX(RobotMap.drive.getDriveTrainX()-xPI); 
+    traveledDistanceVector.setY(RobotMap.drive.getDriveTrainY()-yPI);
+    distToEndPoint.setX(xPF-RobotMap.drive.getDriveTrainX());
+    distToEndPoint.setY(yPF - RobotMap.drive.getDriveTrainY());
+    velocity = -1*(distToMidPoint.length()-pathDistance/2)*(distToMidPoint.length()+pathDistance/2);
+    if(traveledDistanceVector.length()<0.5){
       velocity = 1.2;
     }
-    else if(velocity>5){
-      velocity = 3;
+    else if(velocity>4.0){
+      velocity = 4.0;
     }
-    System.out.println(desiredRobotCurvature);
-
-    setWheelVelocities(velocity, desiredRobotCurvature);
+    SmartDashboard.putNumber("distToEnd",distToEndPoint.length());
 
   }
+  private class PathRunnable implements Runnable{
+		public void run(){
+			if(shouldRunAlgorithm&&RobotState.isAutonomous()){
+        lookAheadPoint = getDesiredPosition(findLookAheadPoint());
+        findRobotCurvature();
+        setWheelVelocities(velocity, desiredRobotCurvature);
+			}
+			else{
+			pathNotifier.stop();
+			}
+		}
+  } 
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
@@ -227,6 +248,8 @@ public class CubicInterpolationFollower extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    pathNotifier.stop();
+    shouldRunAlgorithm = false;
     RobotMap.drive.setLeftPercent(0);
     RobotMap.drive.setRightPercent(0);
   }

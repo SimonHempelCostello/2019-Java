@@ -24,10 +24,12 @@ public class CommandSuites {
     public CommandSuites(){
         armInterface = new ArmInterface();
         driveInterface = new DriveInterface();
-        cubicFollower = new CubicInterpolationFollower(0, 0, 3, 1, 0, 0, 0, 0, 4,2.0);
     }
     public void startAutoCommands(){
-        cubicFollower.start();
+        //cubicFollower = new CubicInterpolationFollower(RobotMap.drive.getDriveTrainX(), RobotMap.drive.getDriveTrainY(), RobotMap.drive.getDriveTrainX()+4, RobotMap.drive.getDriveTrainY()+1, 1, 0, 1, 0, 2,0.4);
+        //cubicFollower.start();
+        basicTestAuto = new testAuto();
+        basicTestAuto.start();
     }
     public void endAutoCommands(){
 
