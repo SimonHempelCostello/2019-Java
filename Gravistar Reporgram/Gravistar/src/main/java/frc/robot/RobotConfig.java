@@ -21,7 +21,7 @@ public class RobotConfig {
         followerTallon.set(ControlMode.Follower, leadTalon.getDeviceID());
     }
     public void setStartingConfig(){
-        RobotMap.shifters.set(RobotMap.highGear);
+        RobotMap.shifters.set(RobotMap.lowGear);
         for(TalonSRX talon:RobotMap.allMotors){
             talon.configFactoryDefault();
         }

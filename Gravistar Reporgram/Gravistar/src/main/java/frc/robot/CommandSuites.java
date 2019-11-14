@@ -26,10 +26,10 @@ public class CommandSuites {
         driveInterface = new DriveInterface();
     }
     public void startAutoCommands(){
-        //cubicFollower = new CubicInterpolationFollower(RobotMap.drive.getDriveTrainX(), RobotMap.drive.getDriveTrainY(), RobotMap.drive.getDriveTrainX()+4, RobotMap.drive.getDriveTrainY()+1, 1, 0, 1, 0, 2,0.4);
-        //cubicFollower.start();
-        basicTestAuto = new testAuto();
-        basicTestAuto.start();
+        cubicFollower = new CubicInterpolationFollower(RobotMap.drive.getDriveTrainX(), RobotMap.drive.getDriveTrainY(), RobotMap.drive.getDriveTrainX()+4.37, RobotMap.drive.getDriveTrainY()+2.689, 1, 0, 1, 0, 8,0.70);
+        cubicFollower.start();
+        //basicTestAuto = new testAuto();
+        //basicTestAuto.start();
     }
     public void endAutoCommands(){
 

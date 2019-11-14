@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    RobotMap.drive.startAutoOdometry(0,2,30);
+    RobotMap.drive.startAutoOdometry(0,0,0);
     commandSuites.startAutoCommands();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.start();

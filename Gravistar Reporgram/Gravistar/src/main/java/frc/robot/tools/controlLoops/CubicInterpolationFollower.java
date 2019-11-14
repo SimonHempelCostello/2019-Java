@@ -48,6 +48,7 @@ public class CubicInterpolationFollower extends Command {
   private double lookAheadDistance;
   private boolean shouldRunAlgorithm;
   private Vector traveledDistanceVector;
+  private double lastTestValue;
   private Notifier pathNotifier;
 
   public CubicInterpolationFollower(double initialXPot, double initialYPot, double finalXPot, double finalYPot, double initialXVel, double initialYVel, double finalXVel, double finalYVel, double timeSpan, double laDistance) {
@@ -68,6 +69,7 @@ public class CubicInterpolationFollower extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {  
+    lastTestValue = 1;
     initialTime = Timer.getFPGATimestamp();
     finalTime = initialTime + deltaT;
     createPathFunction(0, deltaT);
@@ -173,7 +175,7 @@ public class CubicInterpolationFollower extends Command {
 		desiredRobotCurvature = curvature;
   }
   private double findLookAheadPoint(){
-    double testValue = 1;
+    double testValue = lastTestValue;
     double numerator;
     double denominator;
     for(int i = 0; i<8; i++){
@@ -187,6 +189,7 @@ public class CubicInterpolationFollower extends Command {
     if(testValue>deltaT){
       testValue = deltaT;
     }
+    lastTestValue = testValue;
     return testValue;
 
   }
