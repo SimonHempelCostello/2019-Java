@@ -26,7 +26,7 @@ public class CommandSuites {
         driveInterface = new DriveInterface();
     }
     public void startAutoCommands(){
-        cubicFollower = new CubicInterpolationFollower(RobotMap.drive.getDriveTrainX(), RobotMap.drive.getDriveTrainY(), RobotMap.drive.getDriveTrainX()+4.37, RobotMap.drive.getDriveTrainY()+2.689, 1, 0, 1, 0, 8,0.70);
+        cubicFollower = new CubicInterpolationFollower(RobotMap.drive.getDriveTrainX(), RobotMap.drive.getDriveTrainY(), RobotMap.drive.getDriveTrainX()+4.37, RobotMap.drive.getDriveTrainY()+4.37, 1, 0, 1, 0, 8,0.70);
         cubicFollower.start();
         //basicTestAuto = new testAuto();
         //basicTestAuto.start();

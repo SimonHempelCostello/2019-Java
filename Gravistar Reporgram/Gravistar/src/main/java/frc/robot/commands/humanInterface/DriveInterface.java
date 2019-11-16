@@ -42,7 +42,7 @@ public class DriveInterface extends Command {
 	@Override
 	protected void execute() {
 		if(ButtonMap.testVelocity()){
-			RobotMap.visionRelay1.set(RobotMap.lightRingOn);
+			RobotMap.visionRelay1.set(Value.kForward);
 			RobotMap.drive.trackVisionTape();
 		}
 		else{

@@ -72,7 +72,7 @@ public class CubicInterpolationFollower extends Command {
     lastTestValue = 1;
     initialTime = Timer.getFPGATimestamp();
     finalTime = initialTime + deltaT;
-    createPathFunction(0, deltaT);
+    createPathFunction(0, deltaT,xPI, yPI, xPF, yPF);
     midPoint = new Point((xPF+xPI)/2, (yPF+yPI)/2);
     finalPoint = new Point(xPF, xPI);
     distToEndPoint = new Vector(xPF-RobotMap.drive.getDriveTrainX(), yPF - RobotMap.drive.getDriveTrainY());
@@ -86,16 +86,16 @@ public class CubicInterpolationFollower extends Command {
     System.out.println( xFunctionMatrix.get(0, 0) +" + " + xFunctionMatrix.get(1,0)+"t + " + xFunctionMatrix.get(2,0)+"t^2 + " + xFunctionMatrix.get(3,0)+"t^3");
     System.out.println( yFunctionMatrix.get(0, 0) +" + " + yFunctionMatrix.get(1,0)+"t + " + yFunctionMatrix.get(2,0)+"t^2 + " + yFunctionMatrix.get(3,0)+"t^3");
   }
-  public void createPathFunction(double initialTime, double finalTime){
+  public void createPathFunction(double initialTime, double finalTime, double initialXPot, double initialYPot, double finalXPot, double finalYPot){
     xPositionAndVelocityMatrix = new Matrix(4, 1);
-    xPositionAndVelocityMatrix.set(0, 0, xPF);
+    xPositionAndVelocityMatrix.set(0, 0, finalXPot);
     xPositionAndVelocityMatrix.set(1, 0, xVF);
-    xPositionAndVelocityMatrix.set(2, 0, xPI);
+    xPositionAndVelocityMatrix.set(2, 0, initialXPot);
     xPositionAndVelocityMatrix.set(3, 0, xVI);
     yPositionAndVelocityMatrix = new Matrix(4, 1);
-    yPositionAndVelocityMatrix.set(0, 0, yPF);
+    yPositionAndVelocityMatrix.set(0, 0, finalYPot);
     yPositionAndVelocityMatrix.set(1, 0, yVF);
-    yPositionAndVelocityMatrix.set(2, 0, yPI);
+    yPositionAndVelocityMatrix.set(2, 0, initialYPot);
     yPositionAndVelocityMatrix.set(3, 0, yVI);
     timeFunctionMatrix = new Matrix(4, 4);
     timeFunctionMatrix.set(0, 0, 1);
@@ -117,7 +117,7 @@ public class CubicInterpolationFollower extends Command {
     xFunctionMatrix = timeFunctionMatrix.inverse().times(xPositionAndVelocityMatrix);
     yFunctionMatrix = timeFunctionMatrix.inverse().times(yPositionAndVelocityMatrix);
   }
-  public Point getDesiredPosition(double time){
+  private Point getDesiredPosition(double time){
     double xPoint;
     double yPoint;
     if(time<0){
@@ -135,7 +135,7 @@ public class CubicInterpolationFollower extends Command {
       return desiredPoint;
     }
   }
-  public Vector getDesiredVelocity(double time){
+  private Vector getDesiredVelocity(double time){
     double xVelocity;
     double yVelocity;
     if(time<initialTime){
@@ -223,8 +223,8 @@ public class CubicInterpolationFollower extends Command {
     if(traveledDistanceVector.length()<0.5){
       velocity = 1.2;
     }
-    else if(velocity>4.0){
-      velocity = 4.0;
+    else if(velocity>7.0){
+      velocity = 7.0;
     }
     SmartDashboard.putNumber("distToEnd",distToEndPoint.length());
 

@@ -8,16 +8,9 @@
 package frc.robot.commands.controls;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
 
-/**
- * Add your docs here.
- */
-public class SwitchPiston extends InstantCommand {
-  /**
-   * Add your docs here.
-   */
+public class SwitchPiston extends Command {
   private DoubleSolenoid solenoid;
   private DoubleSolenoid.Value position;
   public SwitchPiston(DoubleSolenoid piston, DoubleSolenoid.Value value) {
@@ -34,4 +27,28 @@ public class SwitchPiston extends InstantCommand {
     solenoid.set(position);
   }
 
+
+
+
+  // Called repeatedly when this Command is scheduled to run
+  @Override
+  protected void execute() {
+  }
+
+  // Make this return true when this Command no longer needs to run execute()
+  @Override
+  protected boolean isFinished() {
+    return true;
+  }
+
+  // Called once after isFinished returns true
+  @Override
+  protected void end() {
+  }
+
+  // Called when another command which requires one or more of the same
+  // subsystems is scheduled to run
+  @Override
+  protected void interrupted() {
+  }
 }
