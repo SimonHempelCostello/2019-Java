@@ -20,6 +20,7 @@ import frc.robot.RobotConfig;
 import frc.robot.RobotMap;
 import frc.robot.RobotStats;
 import frc.robot.sensors.DriveEncoder;
+import frc.robot.tools.controlLoops.CubicInterpolationFollower;
 import frc.robot.tools.controlLoops.PID;
 import frc.robot.tools.controlLoops.VelocityPID;
 import frc.robot.tools.pathTools.Odometry;
@@ -38,7 +39,8 @@ public class DriveTrain extends Subsystem {
 	private double sensitivity;
 	private double minTurnFactor = 0.4;
   public static DriveEncoder leftMainDrive = new DriveEncoder(RobotMap.leftDriveLead,RobotMap.leftDriveLead.getSelectedSensorPosition(0));
-  public static DriveEncoder rightMainDrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
+	public static DriveEncoder rightMainDrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
+	private CubicInterpolationFollower cubicInterpolationFollower = new CubicInterpolationFollower(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	private double speed;
   private double f = 0.332;
   private double p = 0.715;
@@ -183,6 +185,9 @@ public class DriveTrain extends Subsystem {
 		else{
 			return false;
 		}
+	}
+	public void pathToVisionTarget(){
+		cubicInterpolationFollower.createPathFunction(0, 2, getDriveTrainX(), getDriveTrainY(), finalXPot, finalYPot,Math.cos(Math.toRadians(getDriveTrainHeading()),Math.sin(Math.to)) );
 	}
 	public void Stop(){
 		RobotMap.leftDriveLead.set(ControlMode.PercentOutput, 0);

@@ -18,7 +18,7 @@ import frc.robot.tools.math.Point;
 import frc.robot.tools.math.Vector;
 import Jama.Matrix;
 
-public class CubicInterpolationFollower extends Command {
+public class CubicInterpolationFollower{
   private double xPI;
   private double yPI;
   private double xPF;
@@ -67,8 +67,7 @@ public class CubicInterpolationFollower extends Command {
   }
 
   // Called just before this Command runs the first time
-  @Override
-  protected void initialize() {  
+  public void initializePathFunction() {  
     lastTestValue = 1;
     initialTime = Timer.getFPGATimestamp();
     finalTime = initialTime + deltaT;
@@ -81,8 +80,6 @@ public class CubicInterpolationFollower extends Command {
     traveledDistanceVector = new Vector(0,0);
     lookAheadPoint = new Point(0,0);
     shouldRunAlgorithm = true;
-    pathNotifier = new Notifier(new PathRunnable());
-    pathNotifier.startPeriodic(0.0005);
     System.out.println( xFunctionMatrix.get(0, 0) +" + " + xFunctionMatrix.get(1,0)+"t + " + xFunctionMatrix.get(2,0)+"t^2 + " + xFunctionMatrix.get(3,0)+"t^3");
     System.out.println( yFunctionMatrix.get(0, 0) +" + " + yFunctionMatrix.get(1,0)+"t + " + yFunctionMatrix.get(2,0)+"t^2 + " + yFunctionMatrix.get(3,0)+"t^3");
   }
@@ -209,10 +206,8 @@ public class CubicInterpolationFollower extends Command {
       RobotMap.drive.setLeftSpeed(leftVelocity);
       RobotMap.drive.setRightSpeed(rightVelocity);
       
-    }
-  // Called repeatedly when this Command is scheduled to run
-  @Override
-  protected void execute() {
+  }
+  public void followPathFunction() {
     distToMidPoint.setX(midPoint.getXPos()-RobotMap.drive.getDriveTrainX());
     distToMidPoint.setY(midPoint.getYPos()-RobotMap.drive.getDriveTrainY());
     traveledDistanceVector.setX(RobotMap.drive.getDriveTrainX()-xPI); 
@@ -220,46 +215,10 @@ public class CubicInterpolationFollower extends Command {
     distToEndPoint.setX(xPF-RobotMap.drive.getDriveTrainX());
     distToEndPoint.setY(yPF - RobotMap.drive.getDriveTrainY());
     velocity = -1*(distToMidPoint.length()-pathDistance/2)*(distToMidPoint.length()+pathDistance/2);
-    if(traveledDistanceVector.length()<0.5){
-      velocity = 1.2;
-    }
-    else if(velocity>7.0){
-      velocity = 7.0;
-    }
+    lookAheadPoint = getDesiredPosition(findLookAheadPoint());
+    findRobotCurvature();
+    setWheelVelocities(velocity, desiredRobotCurvature);
     SmartDashboard.putNumber("distToEnd",distToEndPoint.length());
-
-  }
-  private class PathRunnable implements Runnable{
-		public void run(){
-			if(shouldRunAlgorithm&&RobotState.isAutonomous()){
-        lookAheadPoint = getDesiredPosition(findLookAheadPoint());
-        findRobotCurvature();
-        setWheelVelocities(velocity, desiredRobotCurvature);
-			}
-			else{
-			pathNotifier.stop();
-			}
-		}
-  } 
-
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() {
-    return false;
   }
 
-  // Called once after isFinished returns true
-  @Override
-  protected void end() {
-    pathNotifier.stop();
-    shouldRunAlgorithm = false;
-    RobotMap.drive.setLeftPercent(0);
-    RobotMap.drive.setRightPercent(0);
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
-  }
 }
