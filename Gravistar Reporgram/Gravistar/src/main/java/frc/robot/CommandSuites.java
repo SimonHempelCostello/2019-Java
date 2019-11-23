@@ -26,6 +26,8 @@ public class CommandSuites {
         driveInterface = new DriveInterface();
     }
     public void startAutoCommands(){
+        cubicFollower = new CubicInterpolationFollower(0, 0, -4, -3, -1, 0, -1, 0, 8, 1.0);
+        cubicFollower.start();
 
     }
     public void endAutoCommands(){

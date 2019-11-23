@@ -18,7 +18,7 @@ import frc.robot.tools.math.Point;
 import frc.robot.tools.math.Vector;
 import Jama.Matrix;
 
-public class CubicInterpolationFollower{
+public class CubicInterpolationFollower extends Command {
   private double xPI;
   private double yPI;
   private double xPF;
@@ -67,7 +67,8 @@ public class CubicInterpolationFollower{
   }
 
   // Called just before this Command runs the first time
-  public void initializePathFunction() {  
+  @Override
+  protected void initialize() {  
     lastTestValue = 1;
     initialTime = Timer.getFPGATimestamp();
     finalTime = initialTime + deltaT;
@@ -200,14 +201,16 @@ public class CubicInterpolationFollower{
       double v;
       v = targetVelocity;
       double c = curvature;
-      leftVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
-      rightVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;
+      leftVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;
+      rightVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
   
       RobotMap.drive.setLeftSpeed(leftVelocity);
       RobotMap.drive.setRightSpeed(rightVelocity);
       
-  }
-  public void followPathFunction() {
+    }
+  // Called repeatedly when this Command is scheduled to run
+  @Override
+  protected void execute() {
     distToMidPoint.setX(midPoint.getXPos()-RobotMap.drive.getDriveTrainX());
     distToMidPoint.setY(midPoint.getYPos()-RobotMap.drive.getDriveTrainY());
     traveledDistanceVector.setX(RobotMap.drive.getDriveTrainX()-xPI); 
@@ -215,10 +218,36 @@ public class CubicInterpolationFollower{
     distToEndPoint.setX(xPF-RobotMap.drive.getDriveTrainX());
     distToEndPoint.setY(yPF - RobotMap.drive.getDriveTrainY());
     velocity = -1*(distToMidPoint.length()-pathDistance/2)*(distToMidPoint.length()+pathDistance/2);
+    if(traveledDistanceVector.length()<0.5){
+      velocity = 1.2;
+    }
+    else if(velocity>7.0){
+      velocity = 7.0;
+    }
     lookAheadPoint = getDesiredPosition(findLookAheadPoint());
     findRobotCurvature();
-    setWheelVelocities(velocity, desiredRobotCurvature);
-    SmartDashboard.putNumber("distToEnd",distToEndPoint.length());
+    setWheelVelocities(-velocity, -desiredRobotCurvature);
+
   }
 
+  // Make this return true when this Command no longer needs to run execute()
+  @Override
+  protected boolean isFinished() {
+    return false;
+  }
+
+  // Called once after isFinished returns true
+  @Override
+  protected void end() {
+    pathNotifier.stop();
+    shouldRunAlgorithm = false;
+    RobotMap.drive.setLeftPercent(0);
+    RobotMap.drive.setRightPercent(0);
+  }
+
+  // Called when another command which requires one or more of the same
+  // subsystems is scheduled to run
+  @Override
+  protected void interrupted() {
+  }
 }
