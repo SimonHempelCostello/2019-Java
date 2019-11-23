@@ -120,16 +120,23 @@ public class DriveTrain extends Subsystem {
 		double leftPower;
 		double rightPower;
 		double differential;
-		
-		throttel = ButtonMap.getDriveThrottle(); 
-		if(throttel ==0){
-			throttel = 0.001;
+		if(Math.abs(ButtonMap.getDriveThrottle())>0.1){
+			throttel = Math.tanh(ButtonMap.getDriveThrottle())*(4/3.14); 
 		}
-		ratio = Math.abs(1/throttel);
-		povValue = ButtonMap.getPOV();
-		turn = ButtonMap.getRotation();
-		differential = (turn*ratio*sensitivity) + Math.abs(minTurnFactor*turn);
+		else{
+			throttel = 0;
+		}
 
+		ratio = Math.abs(throttel);
+		if(Math.abs(ButtonMap.getRotation())>0.1){
+			turn = ButtonMap.getRotation();
+		}
+		else{
+			turn = 0;
+		}
+		turn = ButtonMap.getRotation();
+		differential = turn;
+		SmartDashboard.putNumber("differential", differential);
 		leftPower = (throttel - (differential));
 		rightPower = (throttel + (differential));
 	
@@ -141,8 +148,8 @@ public class DriveTrain extends Subsystem {
 			leftPower = Math.abs(leftPower/rightPower)*Math.signum(leftPower);
 			rightPower = Math.signum(rightPower);
 		}
-    RobotMap.leftDriveLead.set(ControlMode.PercentOutput, leftPower);
-    RobotMap.rightDriveLead.set(ControlMode.PercentOutput, rightPower);
+		RobotMap.leftDriveLead.set(ControlMode.PercentOutput, leftPower);
+		RobotMap.rightDriveLead.set(ControlMode.PercentOutput, rightPower);
 		if(ButtonMap.shiftDown()){
 			setLowGear();
 		}
@@ -154,7 +161,7 @@ public class DriveTrain extends Subsystem {
 		}
 		else if(RobotMap.shifters.get() == RobotMap.lowGear) {
 				sensitivity =1;
-    }
+		}
 	}
 	public boolean trackVisionTape(){
     RobotMap.drive.setLowGear();
@@ -185,9 +192,6 @@ public class DriveTrain extends Subsystem {
 		else{
 			return false;
 		}
-	}
-	public void pathToVisionTarget(){
-		cubicInterpolationFollower.createPathFunction(0, 2, getDriveTrainX(), getDriveTrainY(), finalXPot, finalYPot,Math.cos(Math.toRadians(getDriveTrainHeading()),Math.sin(Math.to)) );
 	}
 	public void Stop(){
 		RobotMap.leftDriveLead.set(ControlMode.PercentOutput, 0);

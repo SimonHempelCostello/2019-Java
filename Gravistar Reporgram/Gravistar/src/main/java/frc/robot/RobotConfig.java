@@ -23,14 +23,10 @@ public class RobotConfig {
     public void setStartingConfig(){
         RobotMap.shifters.set(RobotMap.lowGear);
         for(TalonSRX talon:RobotMap.allMotors){
-            talon.configFactoryDefault();
-        }
-        for(TalonSRX talon:RobotMap.allMotors){
             talon.configVoltageCompSaturation(12.1);
             talon.enableVoltageCompensation(true);
         }
         RobotConfig.setAllMotorsBrake();
-        
         RobotMap.rightDriveLead.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,0);
 		RobotMap.leftDriveLead.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,0);
         RobotMap.armMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,0);
@@ -83,9 +79,11 @@ public class RobotConfig {
         }
 	}
 	public static void setDriveMotorsCoast() {
-		for(TalonSRX talon:RobotMap.driveMotors){
-            talon.setNeutralMode(NeutralMode.Coast);
-        }
+        RobotMap.leftDriveLead.setNeutralMode(NeutralMode.Coast);
+        RobotMap.rightDriveLead.setNeutralMode(NeutralMode.Coast);
+        RobotMap.leftDriveFollowerOne.setNeutralMode(NeutralMode.Coast);
+        RobotMap.rightDriveFollowerOne.setNeutralMode(NeutralMode.Coast);
+
 	}
 
 	public static void setDriveMotorsBrake() {
