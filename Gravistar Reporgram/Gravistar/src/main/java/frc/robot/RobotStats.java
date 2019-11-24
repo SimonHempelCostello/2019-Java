@@ -15,7 +15,7 @@ public class RobotStats {
     public static double robotMaxAccertion= 8;
     public static double robotMaxVelocity = 14;
     public static double encoderTicsPerWheelRotation = 4096;
-    public static double wheelDiam = 7.0;
+    public static double wheelDiam = 7.5;
     public static double wheelCircum = wheelDiam*Math.PI;
     public static double joyStickDeadZone = 0.015;
     public static double triggerDeadZone = 0.1;

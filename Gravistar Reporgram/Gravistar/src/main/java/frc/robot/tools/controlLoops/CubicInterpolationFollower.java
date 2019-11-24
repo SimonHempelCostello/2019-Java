@@ -39,7 +39,6 @@ public class CubicInterpolationFollower extends Command {
   private Matrix yFunctionMatrix;
   private double desiredRobotCurvature;
   private Point midPoint; 
-  private Point finalPoint;
   private Point lookAheadPoint;
   private double pathDistance;
   private double velocity;
@@ -49,7 +48,6 @@ public class CubicInterpolationFollower extends Command {
   private boolean shouldRunAlgorithm;
   private Vector traveledDistanceVector;
   private double lastTestValue;
-  private Notifier pathNotifier;
 
   public CubicInterpolationFollower(double initialXPot, double initialYPot, double finalXPot, double finalYPot, double initialXVel, double initialYVel, double finalXVel, double finalYVel, double timeSpan, double laDistance) {
     xPI = initialXPot;
@@ -70,17 +68,17 @@ public class CubicInterpolationFollower extends Command {
   @Override
   protected void initialize() {  
     lastTestValue = 1;
+    shouldRunAlgorithm = false;
     initialTime = Timer.getFPGATimestamp();
     finalTime = initialTime + deltaT;
     createPathFunction(0, deltaT,xPI, yPI, xPF, yPF);
     midPoint = new Point((xPF+xPI)/2, (yPF+yPI)/2);
-    finalPoint = new Point(xPF, xPI);
     distToEndPoint = new Vector(xPF-RobotMap.drive.getDriveTrainX(), yPF - RobotMap.drive.getDriveTrainY());
     distToMidPoint = new Vector(midPoint.getXPos()-RobotMap.drive.getDriveTrainX(), midPoint.getYPos()-RobotMap.drive.getDriveTrainY());
     pathDistance = Math.sqrt(Math.pow(xPF-xPI,2)+Math.pow(yPF-yPI,2));
     traveledDistanceVector = new Vector(0,0);
     lookAheadPoint = new Point(0,0);
-    shouldRunAlgorithm = true;
+    shouldRunAlgorithm = false;
     System.out.println( xFunctionMatrix.get(0, 0) +" + " + xFunctionMatrix.get(1,0)+"t + " + xFunctionMatrix.get(2,0)+"t^2 + " + xFunctionMatrix.get(3,0)+"t^3");
     System.out.println( yFunctionMatrix.get(0, 0) +" + " + yFunctionMatrix.get(1,0)+"t + " + yFunctionMatrix.get(2,0)+"t^2 + " + yFunctionMatrix.get(3,0)+"t^3");
   }
@@ -221,26 +219,27 @@ public class CubicInterpolationFollower extends Command {
     if(traveledDistanceVector.length()<0.5){
       velocity = 1.2;
     }
-    else if(velocity>7.0){
-      velocity = 7.0;
+    else if(velocity>2.0){
+      velocity = 2.0;
     }
+    SmartDashboard.putNumber("distToEnd",distToEndPoint.length());
     lookAheadPoint = getDesiredPosition(findLookAheadPoint());
     findRobotCurvature();
     setWheelVelocities(-velocity, -desiredRobotCurvature);
 
   }
-
+  public void forceEnd(){
+    shouldRunAlgorithm = true;
+  }
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return distToEndPoint.length()<0.2||shouldRunAlgorithm;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    pathNotifier.stop();
-    shouldRunAlgorithm = false;
     RobotMap.drive.setLeftPercent(0);
     RobotMap.drive.setRightPercent(0);
   }

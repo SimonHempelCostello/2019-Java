@@ -43,11 +43,13 @@ public class DriveInterface extends Command {
 	protected void execute() {
 		if(ButtonMap.testVelocity()){
 			RobotMap.visionRelay1.set(Value.kForward);
-			RobotMap.drive.trackVisionTape();
+			RobotMap.drive.pathToVisionTarget();
 		}
 		else{
-			RobotMap.visionRelay1.set(RobotMap.lightRingOff);
-			RobotMap.drive.arcadeDrive();
+			RobotMap.drive.endCubicPathing();
+			RobotMap.visionRelay1.set(Value.kReverse);
+		 	RobotMap.visionRelay1.set(RobotMap.lightRingOff);
+		 	RobotMap.drive.arcadeDrive();
 		}
 
 	}

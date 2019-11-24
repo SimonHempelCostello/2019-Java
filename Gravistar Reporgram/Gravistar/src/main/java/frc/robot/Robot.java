@@ -76,6 +76,9 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("fwdLimitSwitch", false);
       SmartDashboard.putBoolean("revLimitSwitch", false);
     }
+    SmartDashboard.putNumber("xtPos",visionCamera.getTargetPoint().getXPos());
+    SmartDashboard.putNumber("ytPos",visionCamera.getTargetPoint().getYPos());
+
 
     SmartDashboard.putString("CameraString", visionCamera.getString());
     //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
@@ -135,6 +138,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     commandSuites.startTeleopCommands();
+    RobotMap.drive.startAutoOdometry(0,0,0);
     robotConfig.setTeleopConfig();
 
 
@@ -151,6 +155,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
+    SmartDashboard.putNumber("Roboty", RobotMap.drive.getDriveTrainY());
 
     Scheduler.getInstance().run();
   }
