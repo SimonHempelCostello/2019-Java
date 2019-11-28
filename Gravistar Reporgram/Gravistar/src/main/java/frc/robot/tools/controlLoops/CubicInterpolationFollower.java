@@ -48,8 +48,9 @@ public class CubicInterpolationFollower extends Command {
   private boolean shouldRunAlgorithm;
   private Vector traveledDistanceVector;
   private double lastTestValue;
+  private boolean isReversed;
 
-  public CubicInterpolationFollower(double initialXPot, double initialYPot, double finalXPot, double finalYPot, double initialXVel, double initialYVel, double finalXVel, double finalYVel, double timeSpan, double laDistance) {
+  public CubicInterpolationFollower(double initialXPot, double initialYPot, double finalXPot, double finalYPot, double initialXVel, double initialYVel, double finalXVel, double finalYVel, double timeSpan, double laDistance, boolean reversePath) {
     xPI = initialXPot;
     yPI = initialYPot;
     xPF = finalXPot;
@@ -60,6 +61,7 @@ public class CubicInterpolationFollower extends Command {
     yVF = finalYVel;
     deltaT = timeSpan;
     lookAheadDistance = laDistance;
+    isReversed = reversePath;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -197,13 +199,25 @@ public class CubicInterpolationFollower extends Command {
       double leftVelocity;
       double rightVelocity;
       double v;
-      v = targetVelocity;
-      double c = curvature;
+      double c; 
+      if(isReversed){
+        v = -targetVelocity;
+        c = -curvature;
+      }
+      else{
+        v = targetVelocity;
+        c = curvature;
+      }
       leftVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;
       rightVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
-  
-      RobotMap.drive.setLeftSpeed(leftVelocity);
-      RobotMap.drive.setRightSpeed(rightVelocity);
+      if(isReversed){
+        RobotMap.drive.setLeftSpeed(leftVelocity);
+        RobotMap.drive.setRightSpeed(rightVelocity);
+      }
+      else{
+        RobotMap.drive.setLeftSpeed(rightVelocity);
+        RobotMap.drive.setRightSpeed(leftVelocity);
+      }
       
     }
   // Called repeatedly when this Command is scheduled to run
@@ -225,7 +239,7 @@ public class CubicInterpolationFollower extends Command {
     SmartDashboard.putNumber("distToEnd",distToEndPoint.length());
     lookAheadPoint = getDesiredPosition(findLookAheadPoint());
     findRobotCurvature();
-    setWheelVelocities(-velocity, -desiredRobotCurvature);
+    setWheelVelocities(velocity, desiredRobotCurvature);
 
   }
   public void forceEnd(){

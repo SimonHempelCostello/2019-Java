@@ -38,14 +38,14 @@ public class DriveTrain extends Subsystem {
 	private double ratio = 0;
 	private double sensitivity;
 	private double minTurnFactor = 0.4;
-	CubicInterpolationFollower cubicInterpolationFollower = new CubicInterpolationFollower(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	CubicInterpolationFollower cubicInterpolationFollower = new CubicInterpolationFollower(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,true);
   public static DriveEncoder leftMainDrive = new DriveEncoder(RobotMap.leftDriveLead,RobotMap.leftDriveLead.getSelectedSensorPosition(0));
 	public static DriveEncoder rightMainDrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
 	private double speed;
   private double f = 0.332;
-	private double p = 0.715;
-  private double i = 0.000013;
-  private double d = 13.5;
+	private double p = 0.165;
+  private double i = 0.000001;
+  private double d = 0;
 	private int profile = 0;
 	private Odometry autoOdometry;
 	private PID alignmentPID;
@@ -198,7 +198,7 @@ public class DriveTrain extends Subsystem {
 			if(Timer.getFPGATimestamp()-Robot.visionCamera.lastParseTime<0.1){
 		
 				if(!cubicInterpolationFollower.isRunning()){
-					cubicInterpolationFollower = new CubicInterpolationFollower(RobotMap.drive.getDriveTrainX(), RobotMap.drive.getDriveTrainY(), RobotMap.drive.getDriveTrainX()-Robot.visionCamera.getTargetPoint().getXPos(), RobotMap.drive.getDriveTrainY()-Robot.visionCamera.getTargetPoint().getYPos(), -Math.cos(Math.toRadians(RobotMap.drive.getDriveTrainHeading())),- Math.sin(Math.toRadians(RobotMap.drive.getDriveTrainHeading())), -Math.cos(Math.toRadians(RobotMap.drive.getDriveTrainHeading())), -Math.sin(Math.toRadians(RobotMap.drive.getDriveTrainHeading())),2,0.75);
+					cubicInterpolationFollower = new CubicInterpolationFollower(RobotMap.drive.getDriveTrainX(), RobotMap.drive.getDriveTrainY(), RobotMap.drive.getDriveTrainX()-Robot.visionCamera.getTargetPoint().getXPos(), RobotMap.drive.getDriveTrainY()-Robot.visionCamera.getTargetPoint().getYPos(), -Math.cos(Math.toRadians(RobotMap.drive.getDriveTrainHeading())),- Math.sin(Math.toRadians(RobotMap.drive.getDriveTrainHeading())), -Math.cos(Math.toRadians(RobotMap.drive.getDriveTrainHeading())), -Math.sin(Math.toRadians(RobotMap.drive.getDriveTrainHeading())),2,0.75,true);
 					cubicInterpolationFollower.start();
 				}
 				

@@ -9,7 +9,9 @@ package frc.robot.tools.controlLoops;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.RobotConfig;
@@ -24,12 +26,11 @@ public class CascadingPIDTurn extends Command {
   private VelocityPID rightDriveTrainVelocityPID;
   private PID turnPID;
   private double desiredAngle;
-  private DriveEncoder leftSideDriveEncoder;
-  private DriveEncoder rightSideDriveEncoder;
+  private DoubleSolenoid.Value value;
   private double p;
   private double i;
   private double d;
-  private boolean shouldEnd;
+
   public CascadingPIDTurn(double Angle, double kp, double ki, double kd) {
     desiredAngle = Angle;
     p = kp;
@@ -43,19 +44,14 @@ public class CascadingPIDTurn extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    shouldEnd = false;
-    leftDriveTrainVelocityPID = new VelocityPID(0, RobotMap.leftDriveLead, 1, 0.33230122, 0.7, 0.008, 18.0);
-    rightDriveTrainVelocityPID = new VelocityPID(0, RobotMap.rightDriveLead, 1, 0.33230122, 0.7, 0.008, 18.0);
-    turnPID =  new PID(p,i,d );
+    turnPID =  new PID(p,i,d);
     navx = new Navx(RobotMap.navx);
-    leftSideDriveEncoder = new DriveEncoder(RobotMap.leftDriveLead, RobotMap.leftDriveLead.getSelectedSensorPosition(0));
-    rightSideDriveEncoder = new DriveEncoder(RobotMap.rightDriveLead, RobotMap.rightDriveLead.getSelectedSensorPosition(0));
     turnPID.setMaxOutput(RobotStats.robotMaxVelocity);
     turnPID.setMinOutput(-RobotStats.robotMaxVelocity);
     turnPID.setSetPoint(desiredAngle);
-    leftDriveTrainVelocityPID.start();
-    rightDriveTrainVelocityPID.start();
     navx.softResetYaw();
+    value = RobotMap.shifters.get();
+    RobotMap.shifters.set(RobotMap.lowGear);
   }
   public void setTarget(double target){
     turnPID.setSetPoint(target);
@@ -64,12 +60,12 @@ public class CascadingPIDTurn extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    turnPID.updatePID(navx.currentAngle());
-    leftDriveTrainVelocityPID.changeDesiredSpeed(turnPID.getResult());
-    rightDriveTrainVelocityPID.changeDesiredSpeed(-turnPID.getResult());
+    SmartDashboard.putNumber("error", desiredAngle-navx.currentAngle());
+    turnPID.updatePID(navx.currentYaw());
+    RobotMap.drive.setLeftSpeed(-turnPID.getResult());
+    RobotMap.drive.setRightSpeed(turnPID.getResult());
   }
   public void forceFinish(){
-    shouldEnd = true;
   }
   // Make this return true when this Command no longer needs to run execute()
   @Override
@@ -83,9 +79,8 @@ public class CascadingPIDTurn extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    leftDriveTrainVelocityPID.cancel();
-    rightDriveTrainVelocityPID.cancel();
     RobotMap.drive.stopDriveTrainMotors();
+    RobotMap.shifters.set(value);
 
   }
 

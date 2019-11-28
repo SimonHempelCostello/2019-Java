@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    RobotMap.drive.startAutoOdometry(0,0,0);
+    RobotMap.drive.startAutoOdometry(0,4,0);
     robotConfig.setAutoConfig();
     commandSuites.startAutoCommands();
     if (m_autonomousCommand != null) {
@@ -138,7 +138,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     commandSuites.startTeleopCommands();
-    RobotMap.drive.startAutoOdometry(0,0,0);
     robotConfig.setTeleopConfig();
 
 
@@ -155,8 +154,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
-    SmartDashboard.putNumber("Roboty", RobotMap.drive.getDriveTrainY());
 
     Scheduler.getInstance().run();
   }

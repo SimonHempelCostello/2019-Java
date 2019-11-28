@@ -27,7 +27,8 @@ public class CommandSuites {
     }
     public void startAutoCommands(){
 
-
+        basicTestAuto = new testAuto();
+        basicTestAuto.start();
     }
     public void endAutoCommands(){
 
