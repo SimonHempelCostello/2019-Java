@@ -21,7 +21,6 @@ import frc.robot.sensors.DriveEncoder;
 import frc.robot.sensors.Navx;
 
 public class CascadingPIDTurn extends Command {
-  private Navx navx;
   private VelocityPID leftDriveTrainVelocityPID;
   private VelocityPID rightDriveTrainVelocityPID;
   private PID turnPID;
@@ -30,6 +29,7 @@ public class CascadingPIDTurn extends Command {
   private double p;
   private double i;
   private double d;
+  private double startAngle;
 
   public CascadingPIDTurn(double Angle, double kp, double ki, double kd) {
     desiredAngle = Angle;
@@ -45,12 +45,11 @@ public class CascadingPIDTurn extends Command {
   @Override
   protected void initialize() {
     turnPID =  new PID(p,i,d);
-    navx = new Navx(RobotMap.navx);
     turnPID.setMaxOutput(RobotStats.robotMaxVelocity);
     turnPID.setMinOutput(-RobotStats.robotMaxVelocity);
     turnPID.setSetPoint(desiredAngle);
-    navx.softResetYaw();
     value = RobotMap.shifters.get();
+    startAngle = RobotMap.drive.getDriveTrainHeading();
     RobotMap.shifters.set(RobotMap.lowGear);
   }
   public void setTarget(double target){
@@ -60,17 +59,19 @@ public class CascadingPIDTurn extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    SmartDashboard.putNumber("error", desiredAngle-navx.currentAngle());
-    turnPID.updatePID(navx.currentYaw());
+    System.out.println("RobotMap.shifters.get"+RobotMap.shifters.get());
+    SmartDashboard.putNumber("error", desiredAngle-RobotMap.drive.getDriveTrainHeading());
+    turnPID.updatePID(RobotMap.drive.getDriveTrainHeading());
     RobotMap.drive.setLeftSpeed(-turnPID.getResult());
     RobotMap.drive.setRightSpeed(turnPID.getResult());
+
   }
   public void forceFinish(){
   }
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if(Math.abs(navx.currentAngle()-desiredAngle)<0.5){
+    if(Math.abs(RobotMap.drive.getDriveTrainHeading()-desiredAngle)<0.5){
       return true;
     }
     return false;
