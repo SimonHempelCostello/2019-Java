@@ -18,9 +18,9 @@ public class testAuto extends CommandGroup {
    * Add your docs here.
    */
   public testAuto() {
-    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 0.95, 5.0, true, true));
-    addSequential(new CascadingPIDTurn(-60, 0.4, 0, 0));
-    //addSequential(new PurePursuitController(Robot.pathlist.test2Path, 0.95, 5.0, true, true));
+    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 0.65, 5.0, true, true));
+    addSequential(new CascadingPIDTurn(120, 0.4, 0, 0));
+  //  addSequential(new PurePursuitController(Robot.pathlist.test2Path, 0.95, 5.0, true, true));
 
    
 

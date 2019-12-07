@@ -205,11 +205,11 @@ public class PurePursuitController extends Command {
 		}
 		distToEndVector.setX(chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).x-odometry.getX());
 		distToEndVector.setY(chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).y-odometry.getY());
-		SmartDashboard.putNumber("distoend", distToEndVector.length());
+		/*SmartDashboard.putNumber("distoend", distToEndVector.length());
 		SmartDashboard.putNumber("x", odometry.getX());
 		SmartDashboard.putNumber("closestSegment", chosenPath.getMainPath().length()-closestSegment);
 		SmartDashboard.putNumber("y",odometry.getY());
-		SmartDashboard.putNumber("theta", odometry.gettheta());
+		SmartDashboard.putNumber("theta", odometry.gettheta());*/
 		startingNumberLA = (int)partialPointIndex;
 		lastLookAheadPoint = lookAheadPoint;
 		findRobotCurvature();
@@ -256,8 +256,6 @@ public class PurePursuitController extends Command {
 		}
 		leftVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
 		rightVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;
-		SmartDashboard.putNumber("left", leftVelocity);
-		SmartDashboard.putNumber("right", rightVelocity);
 
 		if(chosenPath.getReversed()){
 			RobotMap.drive.setLeftSpeed(rightVelocity);

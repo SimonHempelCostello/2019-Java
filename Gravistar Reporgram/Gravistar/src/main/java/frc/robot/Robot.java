@@ -64,25 +64,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    if(RobotMap.armMaster.getSensorCollection().isFwdLimitSwitchClosed()){
-      SmartDashboard.putBoolean("fwdLimitSwitch", true);
-      SmartDashboard.putBoolean("revLimitSwitch", false);
-    }
-    else if(RobotMap.armMaster.getSensorCollection().isRevLimitSwitchClosed()){
-      SmartDashboard.putBoolean("fwdLimitSwitch", false);
-      SmartDashboard.putBoolean("revLimitSwitch", true);
-    }
-    else{
-      SmartDashboard.putBoolean("fwdLimitSwitch", false);
-      SmartDashboard.putBoolean("revLimitSwitch", false);
-    }
-    SmartDashboard.putNumber("xtPos",visionCamera.getTargetPoint().getXPos());
-    SmartDashboard.putNumber("ytPos",visionCamera.getTargetPoint().getYPos());
+ 
 
 
-    SmartDashboard.putString("CameraString", visionCamera.getString());
-    //SmartDashboard.putNumber("armSpinnyBoy",RobotMap.arm.mainArmEncoder.getRawPosition());
-    //SmartDashboard.putNumber("armSpinnyBoy1",RobotMap.arm.mainArmEncoder.getAngle());
   }
   /**
    * This function is called once each time the robot enters Disabled mode.
@@ -133,6 +117,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     SmartDashboard.putNumber("Robotx", RobotMap.drive.getDriveTrainX());
     SmartDashboard.putNumber("Roboty", RobotMap.drive.getDriveTrainY());
+    SmartDashboard.putNumber("Angle", RobotMap.drive.getDriveTrainHeading());
     Scheduler.getInstance().run();
   }
   @Override

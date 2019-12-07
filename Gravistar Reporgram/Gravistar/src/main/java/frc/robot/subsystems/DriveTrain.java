@@ -136,7 +136,6 @@ public class DriveTrain extends Subsystem {
 		}
 		turn = ButtonMap.getRotation();
 		differential = turn;
-		SmartDashboard.putNumber("differential", differential);
 		leftPower = (throttel - (differential));
 		rightPower = (throttel + (differential));
 	

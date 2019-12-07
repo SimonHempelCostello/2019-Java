@@ -27,9 +27,7 @@ public class Navx {
 		originalPitch = imu.getPitch();
 		originalRoll = imu.getRoll();
 	}
-	public double currentAngle() {
-		return imu.getAngle()-originalAngle;	
-	}
+
 	public double currentPitch(){
 		return imu.getPitch();
 	}
@@ -40,6 +38,12 @@ public class Navx {
 		return ((imu.getYaw())-originalYaw);
 	}
 	public double currentReverseYaw(){
+		return Pathfinder.boundHalfDegrees((imu.getYaw())-originalYaw+180) ;
+	}
+	public double currentAngle() {
+		return imu.getAngle()-originalAngle;	
+	}
+	public double currentReverseAngle(){
 		return Pathfinder.boundHalfDegrees((imu.getYaw())-originalYaw+180) ;
 	}
 	public boolean isMoving() {

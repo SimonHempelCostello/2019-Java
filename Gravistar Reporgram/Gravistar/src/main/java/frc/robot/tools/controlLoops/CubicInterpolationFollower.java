@@ -236,7 +236,6 @@ public class CubicInterpolationFollower extends Command {
     else if(velocity>2.0){
       velocity = 2.0;
     }
-    SmartDashboard.putNumber("distToEnd",distToEndPoint.length());
     lookAheadPoint = getDesiredPosition(findLookAheadPoint());
     findRobotCurvature();
     setWheelVelocities(velocity, desiredRobotCurvature);
