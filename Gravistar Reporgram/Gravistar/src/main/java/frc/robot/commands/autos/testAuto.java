@@ -9,37 +9,17 @@ package frc.robot.commands.autos;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.commands.controls.DeadReackonDrive;
+import frc.robot.commands.controls.SetRobotOdometryPostion;
 import frc.robot.tools.controlLoops.CascadingPIDTurn;
 import frc.robot.tools.controlLoops.PurePursuitController;
 
 public class testAuto extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
+
   public testAuto() {
-    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 0.65, 5.0, true, true));
-    addSequential(new CascadingPIDTurn(120, 0.4, 0, 0));
-  //  addSequential(new PurePursuitController(Robot.pathlist.test2Path, 0.95, 5.0, true, true));
-
-   
-
-
-    // Add Commands here:
-    // e.g. addSequential(new Command1());
-    // addSequential(new Command2());
-    // these will run in order.
-
-    // To run multiple commands at the same time,
-    // use addParallel()
-    // e.g. addParallel(new Command1());
-    // addSequential(new Command2());
-    // Command1 and Command2 will run in parallel.
-
-    // A command group will require all of the subsystems that each member
-    // would require.
-    // e.g. if Command1 requires chassis, and Command2 requires arm,
-    // a CommandGroup containing them would require both the chassis and the
-    // arm.
+    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 1.5, 4.8, true, true));
+    addSequential(new CascadingPIDTurn(120, 0.4, 0,0));
+    addSequential(new SetRobotOdometryPostion(17.28, RobotMap.drive.getDriveTrainY(), 120));
   }
 }

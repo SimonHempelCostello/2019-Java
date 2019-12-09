@@ -21,7 +21,6 @@ public class RobotConfig {
         followerTallon.set(ControlMode.Follower, leadTalon.getDeviceID());
     }
     public void setStartingConfig(){
-        RobotMap.shifters.set(RobotMap.highGear);
         for(TalonSRX talon:RobotMap.allMotors){
             talon.configVoltageCompSaturation(12.1);
             talon.enableVoltageCompensation(true);
@@ -68,6 +67,7 @@ public class RobotConfig {
 
     }
     public void setTeleopConfig(){
+        RobotMap.shifters.set(RobotMap.highGear);
         RobotConfig.setDriveMotorsCoast();
     }
     public void setAutoConfig(){

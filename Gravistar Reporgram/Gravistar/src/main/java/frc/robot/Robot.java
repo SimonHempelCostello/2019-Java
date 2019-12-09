@@ -64,8 +64,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
- 
-
 
   }
   /**
@@ -104,6 +102,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     RobotMap.drive.startAutoOdometry(0,4,0);
+    RobotMap.drive.setOdometryReversed(false);
     robotConfig.setAutoConfig();
     commandSuites.startAutoCommands();
     if (m_autonomousCommand != null) {
@@ -125,6 +124,8 @@ public class Robot extends TimedRobot {
     commandSuites.startTeleopCommands();
     robotConfig.setTeleopConfig();
 
+    robotConfig.setAutoConfig();
+
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -139,6 +140,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+
 
     Scheduler.getInstance().run();
   }

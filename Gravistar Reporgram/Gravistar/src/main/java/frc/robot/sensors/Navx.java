@@ -38,7 +38,7 @@ public class Navx {
 		return ((imu.getYaw())-originalYaw);
 	}
 	public double currentReverseYaw(){
-		return Pathfinder.boundHalfDegrees((imu.getYaw())-originalYaw+180) ;
+		return -((imu.getYaw())-originalYaw) ;
 	}
 	public double currentAngle() {
 		return imu.getAngle()-originalAngle;	
@@ -76,5 +76,8 @@ public class Navx {
 	}
 	public void softResetYaw(){
 		originalYaw = RobotMap.navx.getYaw();
+	}
+	public void setInitialYaw(double Yaw){
+		originalYaw = Yaw;
 	}
 }

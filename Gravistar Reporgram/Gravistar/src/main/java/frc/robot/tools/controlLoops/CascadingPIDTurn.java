@@ -79,6 +79,7 @@ public class CascadingPIDTurn extends Command {
   @Override
   protected void end() {
     RobotMap.drive.stopDriveTrainMotors();
+    System.out.println("done");
     RobotMap.shifters.set(value);
 
   }

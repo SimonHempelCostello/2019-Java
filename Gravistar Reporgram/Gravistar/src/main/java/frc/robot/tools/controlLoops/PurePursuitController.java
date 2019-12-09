@@ -124,7 +124,7 @@ public class PurePursuitController extends Command {
 		shouldRunAlgorithm = true;
 		curveAdjustedVelocity = 0;
 		pathNotifier = new Notifier(new PathRunnable());
-		pathNotifier.startPeriodic(0.001);
+		pathNotifier.startPeriodic(0.01);
     }
  	private class PathRunnable implements Runnable{
 		public void run(){
@@ -196,6 +196,7 @@ public class PurePursuitController extends Command {
 				i = chosenPath.getMainPath().length();
 			}
 			else if(!firstLookAheadFound && i==chosenPath.getMainPath().length()-1){
+				System.out.println("failed");
 				lookAheadPoint.setLocation(lastLookAheadPoint.getXPos(), lastLookAheadPoint.getYPos());
 			}
 		}
@@ -205,11 +206,13 @@ public class PurePursuitController extends Command {
 		}
 		distToEndVector.setX(chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).x-odometry.getX());
 		distToEndVector.setY(chosenPath.getMainPath().get(chosenPath.getMainPath().length()-1).y-odometry.getY());
-		/*SmartDashboard.putNumber("distoend", distToEndVector.length());
+		SmartDashboard.putNumber("distoend", distToEndVector.length());
 		SmartDashboard.putNumber("x", odometry.getX());
-		SmartDashboard.putNumber("closestSegment", chosenPath.getMainPath().length()-closestSegment);
+		SmartDashboard.putNumber("closestSegment", closestSegment);
 		SmartDashboard.putNumber("y",odometry.getY());
-		SmartDashboard.putNumber("theta", odometry.gettheta());*/
+		SmartDashboard.putNumber("theta", odometry.gettheta());
+		SmartDashboard.putNumber("LAX", lookAheadPoint.getXPos());
+		SmartDashboard.putNumber("LAY", lookAheadPoint.getYPos());
 		startingNumberLA = (int)partialPointIndex;
 		lastLookAheadPoint = lookAheadPoint;
 		findRobotCurvature();
@@ -252,7 +255,6 @@ public class PurePursuitController extends Command {
 		double c = curvature;
 		if(chosenPath.getReversed()){
 			v = -v;
-			c = -c;
 		}
 		leftVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
 		rightVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;
@@ -298,7 +300,6 @@ public class PurePursuitController extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		System.out.println(RobotMap.drive.getDriveTrainX());
 		pathNotifier.stop();
 		shouldRunAlgorithm = false;
 		odometry.endOdmetry();
