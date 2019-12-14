@@ -61,7 +61,6 @@ public class PurePursuitController extends Command {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
   	}
-  	//for carried over angle
   	public PurePursuitController(PathSetup path, double lookAhead, double kValue, boolean outsideOdometry, boolean robotAbsoluteDirection){
 		chosenPath = path;
 		lookAheadDistance = lookAhead;  
@@ -137,9 +136,11 @@ public class PurePursuitController extends Command {
 		}
   	}
   	private void purePursuitAlgorithm(){
-		odometry.setX(RobotMap.drive.getDriveTrainX());
+		if(useOutsideOdometry){
+			odometry.setX(RobotMap.drive.getDriveTrainX());
+			odometry.setY(RobotMap.drive.getDriveTrainY());
+		}
 
-		odometry.setY(RobotMap.drive.getDriveTrainY());
 		for(int i = startingNumber; i<chosenPath.getMainPath().length()-1;i++){        
 			deltaX = chosenPath.getMainPath().get(i).x-odometry.getX();
 			deltaY = chosenPath.getMainPath().get(i).y-odometry.getY();

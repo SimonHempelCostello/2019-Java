@@ -101,8 +101,7 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    RobotMap.drive.startAutoOdometry(0,4,0);
-    RobotMap.drive.setOdometryReversed(false);
+    RobotMap.drive.startAutoOdometry(0,4,0, true);
     robotConfig.setAutoConfig();
     commandSuites.startAutoCommands();
     if (m_autonomousCommand != null) {
@@ -124,7 +123,6 @@ public class Robot extends TimedRobot {
     commandSuites.startTeleopCommands();
     robotConfig.setTeleopConfig();
 
-    robotConfig.setAutoConfig();
 
 
     // This makes sure that the autonomous stops running when

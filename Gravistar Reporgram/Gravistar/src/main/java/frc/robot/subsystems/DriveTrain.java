@@ -60,8 +60,8 @@ public class DriveTrain extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
 	}
-	public void startAutoOdometry(double x, double y, double theta){
-		autoOdometry = new Odometry(false);
+	public void startAutoOdometry(double x, double y, double theta, boolean reversed){
+		autoOdometry = new Odometry(reversed);
 		autoOdometry.setX(x);
 		autoOdometry.setY(y);
 		autoOdometry.setTheta(theta);
@@ -76,6 +76,10 @@ public class DriveTrain extends Subsystem {
 	public double getDriveTrainHeading(){
 		return autoOdometry.gettheta();
 	}
+	public void forceResetOdometry(double x, double y, double theta, boolean reversed){
+		autoOdometry.endOdmetry();
+		startAutoOdometry(x, y, theta, reversed);
+	}
 
 	public void setDriveTrainX(double x){
 		 autoOdometry.setX(x);
@@ -88,6 +92,9 @@ public class DriveTrain extends Subsystem {
 	}
 	public void setOdometryReversed(boolean reversed){
 		 autoOdometry.setReversed(reversed);
+	}
+	public void zeroOdometry(){
+		autoOdometry.zero();
 	}
 
   public void setLowGear(){

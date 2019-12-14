@@ -21,8 +21,6 @@ import frc.robot.sensors.DriveEncoder;
 import frc.robot.sensors.Navx;
 
 public class CascadingPIDTurn extends Command {
-  private VelocityPID leftDriveTrainVelocityPID;
-  private VelocityPID rightDriveTrainVelocityPID;
   private PID turnPID;
   private Navx navx;
   private double desiredAngle;
@@ -36,7 +34,7 @@ public class CascadingPIDTurn extends Command {
     p = kp;
     i = ki;
     d = kd;
-    //requires(RobotMap.drive);
+    requires(RobotMap.drive);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -59,7 +57,7 @@ public class CascadingPIDTurn extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    turnPID.updatePID(navx.currentAngle());
+    turnPID.updatePID(RobotMap.drive.getDriveTrainHeading());
     RobotMap.drive.setLeftSpeed(-turnPID.getResult());
     RobotMap.drive.setRightSpeed(turnPID.getResult());
 
@@ -69,7 +67,7 @@ public class CascadingPIDTurn extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if(Math.abs(navx.currentAngle()-desiredAngle)<0.5){
+    if(Math.abs(RobotMap.drive.getDriveTrainHeading()-desiredAngle)<0.5){
       return true;
     }
     return false;
@@ -79,7 +77,6 @@ public class CascadingPIDTurn extends Command {
   @Override
   protected void end() {
     RobotMap.drive.stopDriveTrainMotors();
-    System.out.println("done");
     RobotMap.shifters.set(value);
 
   }

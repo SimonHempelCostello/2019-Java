@@ -123,12 +123,12 @@ public class Odometry extends Command {
       if(isReversed){
         leftSideNext = leftDriveEncoder.getDistance();
         rightSideNext = rightDriveEncoder.getDistance();
-        thetaNext = navx.currentYaw()+thetaOffset;
+        thetaNext = navx.currentAngle()+thetaOffset;
         leftDelta = (leftSideNext-leftSide);
         rightDelta = (rightSideNext-rightSide);
         centerDelta = (leftDelta+rightDelta)/2;
-        xNext = x-centerDelta*Math.cos(Math.toRadians(thetaNext));
         yNext = y-centerDelta*Math.sin(Math.toRadians(thetaNext));
+        xNext = x-centerDelta*Math.cos(Math.toRadians(thetaNext));
         x = xNext;
         y = yNext;
         theta = thetaNext;
@@ -138,7 +138,7 @@ public class Odometry extends Command {
       else{
         leftSideNext = leftDriveEncoder.getDistance();
         rightSideNext = rightDriveEncoder.getDistance();
-        thetaNext = navx.currentYaw()+thetaOffset;
+        thetaNext = navx.currentAngle()+thetaOffset;
         leftDelta = (leftSideNext-leftSide);
         rightDelta = (rightSideNext-rightSide);
         centerDelta = (leftDelta+rightDelta)/2;

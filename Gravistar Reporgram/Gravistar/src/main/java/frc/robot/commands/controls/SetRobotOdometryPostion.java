@@ -14,10 +14,12 @@ public class SetRobotOdometryPostion extends Command {
   private double x;
   private double y;
   private double heading;
-  public SetRobotOdometryPostion(double desiredX, double desiredY, double desiredHeading) {
+  private boolean reversed;
+  public SetRobotOdometryPostion(double desiredX, double desiredY, double desiredHeading, boolean shouldReverse) {
     x = desiredX;
     y = desiredY;
     heading = desiredHeading;
+    reversed = shouldReverse;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -25,9 +27,7 @@ public class SetRobotOdometryPostion extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    RobotMap.drive.setDriveTrainX(x);
-    RobotMap.drive.setDriveTrainY(y);
-    RobotMap.drive.setDriveTrainHeading(heading);
+    RobotMap.drive.forceResetOdometry(x, y, heading, reversed);
   }
 
   // Called repeatedly when this Command is scheduled to run

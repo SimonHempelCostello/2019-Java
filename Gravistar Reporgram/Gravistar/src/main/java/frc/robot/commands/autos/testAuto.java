@@ -20,6 +20,7 @@ public class testAuto extends CommandGroup {
   public testAuto() {
     addSequential(new PurePursuitController(Robot.pathlist.test1Path, 1.5, 4.8, true, true));
     addSequential(new CascadingPIDTurn(120, 0.4, 0,0));
-    addSequential(new SetRobotOdometryPostion(17.28, RobotMap.drive.getDriveTrainY(), 120));
+    addSequential(new SetRobotOdometryPostion(11,0, 120, true));
+    addSequential(new PurePursuitController(Robot.pathlist.test2Path, 1.5, 4.8, true, true));
   }
 }
