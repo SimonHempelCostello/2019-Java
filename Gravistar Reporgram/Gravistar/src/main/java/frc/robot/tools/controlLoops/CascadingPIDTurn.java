@@ -67,7 +67,7 @@ public class CascadingPIDTurn extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if(Math.abs(RobotMap.drive.getDriveTrainHeading()-desiredAngle)<0.5){
+    if(Math.abs(RobotMap.drive.getDriveTrainHeading()-desiredAngle)<1.5){
       return true;
     }
     return false;
@@ -78,7 +78,7 @@ public class CascadingPIDTurn extends Command {
   protected void end() {
     RobotMap.drive.stopDriveTrainMotors();
     RobotMap.shifters.set(value);
-
+    System.out.println("done");
   }
 
   // Called when another command which requires one or more of the same

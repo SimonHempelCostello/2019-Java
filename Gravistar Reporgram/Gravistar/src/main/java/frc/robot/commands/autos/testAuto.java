@@ -18,9 +18,8 @@ import frc.robot.tools.controlLoops.PurePursuitController;
 public class testAuto extends CommandGroup {
 
   public testAuto() {
-    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 1.5, 4.8, true, true));
-    addSequential(new CascadingPIDTurn(120, 0.4, 0,0));
-    addSequential(new SetRobotOdometryPostion(11,0, 120, true));
-    addSequential(new PurePursuitController(Robot.pathlist.test2Path, 1.5, 4.8, true, true));
+    addSequential(new PurePursuitController(Robot.pathlist.test1Path, 0.8, 4.8, true, true));
+    addSequential(new CascadingPIDTurn(120, 0.3, 0.01, 0));
+    addSequential(new PurePursuitController(Robot.pathlist.test2Path, 0.8, 4.8, true, true));
   }
 }

@@ -252,10 +252,12 @@ public class PurePursuitController extends Command {
 		else{
 			v = targetVelocity;
 		}
-		
 		double c = curvature;
 		if(chosenPath.getReversed()){
 			v = -v;
+		}
+		else{
+			c = -c;
 		}
 		leftVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
 		rightVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;

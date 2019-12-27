@@ -16,9 +16,7 @@ import jaci.pathfinder.Waypoint;
 public class PathList {
   private File testFile1 = new File("/home/lvuser/deploy/2HatchAuto1.pf1.csv");
   private File testFile2 = new File("/home/lvuser/deploy/2HatchAuto2.pf1.csv");
-  private File testFile3 = new File("/home/lvuser/deploy/2HatchAuto3.pf1.csv");
 
-  public PathSetup test3Path;
   public PathSetup test2Path;
   public PathSetup test1Path;
 
@@ -29,9 +27,6 @@ public class PathList {
   public PathList() {
     test1Path = new PathSetup(testFile1, true);
     test2Path = new PathSetup(testFile2, true);
-    test3Path = new PathSetup(testFile3, false);
-
-
 	}
     
   
