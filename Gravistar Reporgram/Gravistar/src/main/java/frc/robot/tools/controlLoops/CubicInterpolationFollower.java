@@ -194,7 +194,6 @@ public class CubicInterpolationFollower extends Command {
   private double getCurrentTime(){
     return Timer.getFPGATimestamp()-initialTime;
   }
-
   private void setWheelVelocities(double targetVelocity, double curvature){
       double leftVelocity;
       double rightVelocity;
@@ -217,9 +216,8 @@ public class CubicInterpolationFollower extends Command {
       else{
         RobotMap.drive.setLeftSpeed(rightVelocity);
         RobotMap.drive.setRightSpeed(leftVelocity);
-      }
-      
-    }
+      }   
+  }
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
@@ -233,8 +231,8 @@ public class CubicInterpolationFollower extends Command {
     if(traveledDistanceVector.length()<0.5){
       velocity = 1.2;
     }
-    else if(velocity>2.0){
-      velocity = 2.0;
+    else if(velocity>6.0){
+      velocity = 6.0;
     }
     lookAheadPoint = getDesiredPosition(findLookAheadPoint());
     findRobotCurvature();

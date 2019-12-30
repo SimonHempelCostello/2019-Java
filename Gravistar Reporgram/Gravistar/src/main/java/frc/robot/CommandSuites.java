@@ -7,7 +7,8 @@
 
 package frc.robot;
 
-import frc.robot.commands.autos.testAuto;
+import frc.robot.commands.autos.DemoAuto;
+import frc.robot.commands.autos.MultiHatchAuto;;
 import frc.robot.commands.humanInterface.ArmInterface;
 import frc.robot.commands.humanInterface.DriveInterface;
 import frc.robot.tools.controlLoops.CubicInterpolationFollower;
@@ -17,18 +18,18 @@ import frc.robot.tools.controlLoops.VelocityPID;
  * Add your docs here.
  */
 public class CommandSuites {
-    public DriveInterface driveInterface;
-    public ArmInterface armInterface;
-    public testAuto basicTestAuto;
+    private DriveInterface driveInterface;
+    private ArmInterface armInterface;
+    private MultiHatchAuto basicTestAuto;
     private CubicInterpolationFollower cubicFollower;
+    private DemoAuto demoAuto;
     public CommandSuites(){
         armInterface = new ArmInterface();
         driveInterface = new DriveInterface();
     }
     public void startAutoCommands(){
-
-        basicTestAuto = new testAuto();
-        basicTestAuto.start();
+        demoAuto = new DemoAuto();
+        demoAuto.start();
     }
     public void endAutoCommands(){
 

@@ -8,27 +8,27 @@
 package frc.robot.tools.pathTools;
 
 import java.io.File;
-import java.io.IOException;
-
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Waypoint;
 
 public class PathList {
-  private File testFile1 = new File("/home/lvuser/deploy/2HatchAuto1.pf1.csv");
-  private File testFile2 = new File("/home/lvuser/deploy/2HatchAuto2.pf1.csv");
-  private File testFile3 = new File("/home/lvuser/deploy/2HatchAuto3.pf1.csv");
+  private File multiHatchAutoFile1 = new File("/home/lvuser/deploy/2HatchAuto1.pf1.csv");
+  private File multiHatchAutoFile2 = new File("/home/lvuser/deploy/2HatchAuto2.pf1.csv");
+  private File multiHatchAutoFile3 = new File("/home/lvuser/deploy/2HatchAuto3.pf1.csv");
+  private File demoAutoFile1 = new File("/home/lvuser/deploy/demoAuto.pf1.csv");
 
-  public PathSetup test2Path;
-  public PathSetup test1Path;
-  public PathSetup test3Path;
 
-   //remember that for all paths if the first point is at (0,0,0) for some reason the end y value is revesred in the coordinate plane
-  //for example for a path from (x,y,h) to (0,0,0) a path that goes from (0,0,0) to (x,y,h) would look the same but for one you would 
-  // be decreasing y units on the coordinate plane, while in the other you would be increasing y units
+  public PathSetup multiHatchAutoPath1;
+  public PathSetup multiHatchAutoPath2;
+  public PathSetup multiHatchAutoPath3;
+  public PathSetup demoAuto1;
+
+
   public PathList() {
-    test1Path = new PathSetup(testFile1, true);
-    test2Path = new PathSetup(testFile2, true);
-    test3Path = new PathSetup(testFile3, false);
+    multiHatchAutoPath1 = new PathSetup(multiHatchAutoFile1, true);
+    multiHatchAutoPath2 = new PathSetup(multiHatchAutoFile2, true);
+    multiHatchAutoPath3 = new PathSetup(multiHatchAutoFile3, false);
+    demoAuto1 = new PathSetup(demoAutoFile1, false);
+
+
 
 	}
     

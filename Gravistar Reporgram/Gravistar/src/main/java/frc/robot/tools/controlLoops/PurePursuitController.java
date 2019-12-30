@@ -58,8 +58,6 @@ public class PurePursuitController extends Command {
 		k = kValue;  
 		requires(RobotMap.drive);
 		useOutsideOdometry = false;
-		// Use requires() here to declare subsystem dependencies
-		// eg. requires(chassis);
   	}
   	public PurePursuitController(PathSetup path, double lookAhead, double kValue, boolean outsideOdometry, boolean robotAbsoluteDirection){
 		chosenPath = path;
@@ -67,14 +65,11 @@ public class PurePursuitController extends Command {
 		k = kValue;  
 		useOutsideOdometry = outsideOdometry;
 		//robot absolute direction describes the direction of robot movemnt for which x increases positively,
-		//if robotAbsoluteDirection is true, assuming a theta of 0, negative drivetrain values on both side will lead to x increasing
-		//if robotAbsoluteDirection is false, assuming a theta of 0, positive drivetrain values on both sides will lead to x increasing,
+		//if robotAbsoluteDirection is true, assuming a theta of 0, the robot moving backwards (on gravistar to battery side) will lead to x increasing
+		//if robotAbsoluteDirection is false, assuming a theta of 0, the robot moving forwards (on gravistar away from battery side) will lead to x increasing,
 		//this way the robot can run any path either forward or reversed, as long as robotAbsoluteDirection remains constant.
 		odometryDirection = robotAbsoluteDirection;
 		requires(RobotMap.drive);
-
-		// Use requires() here to declare subsystem dependencies
-		// eg. requires(chassis);
  	}
 
 
@@ -123,7 +118,7 @@ public class PurePursuitController extends Command {
 		shouldRunAlgorithm = true;
 		curveAdjustedVelocity = 0;
 		pathNotifier = new Notifier(new PathRunnable());
-		pathNotifier.startPeriodic(0.01);
+		pathNotifier.startPeriodic(0.02);
     }
  	private class PathRunnable implements Runnable{
 		public void run(){
@@ -151,9 +146,6 @@ public class PurePursuitController extends Command {
 				closestPoint.setLocation(chosenPath.getMainPath().get(i).x, chosenPath.getMainPath().get(i).y);
 			}
 		}
-		if(minDistanceToPoint<lookAheadDistance){
-
-		}
 		startingNumber = closestSegment;
 		minDistanceToPoint = 100;
 		firstLookAheadFound = false;
@@ -179,17 +171,15 @@ public class PurePursuitController extends Command {
 				if(lookAheadIndexT1>=0&&lookAheadIndexT1<=1){
 					partialPointIndex = i+lookAheadIndexT1;
 					if(partialPointIndex>lastPointIndex){
-					lookAheadPoint.setLocation(startingPointOfLineSegment.getXPos()+ lookAheadIndexT1*lineSegVector.getxVec() , startingPointOfLineSegment.getYPos() + lookAheadIndexT1*lineSegVector.getyVec());
-					firstLookAheadFound = true;
+						lookAheadPoint.setLocation(startingPointOfLineSegment.getXPos()+ lookAheadIndexT1*lineSegVector.getxVec() , startingPointOfLineSegment.getYPos() + lookAheadIndexT1*lineSegVector.getyVec());
+						firstLookAheadFound = true;
 					}
 				}
-				
 				else if(lookAheadIndexT2>=0&&lookAheadIndexT2<=1){
 					partialPointIndex = i+lookAheadIndexT2;
 					if(partialPointIndex>lastPointIndex){
-					lookAheadPoint.setLocation(startingPointOfLineSegment.getXPos() + lookAheadIndexT2*lineSegVector.getxVec() , startingPointOfLineSegment.getYPos() + lookAheadIndexT2*lineSegVector.getyVec());
-					firstLookAheadFound = true;
-
+						lookAheadPoint.setLocation(startingPointOfLineSegment.getXPos() + lookAheadIndexT2*lineSegVector.getxVec() , startingPointOfLineSegment.getYPos() + lookAheadIndexT2*lineSegVector.getyVec());
+						firstLookAheadFound = true;
 					}
 				}
 			}

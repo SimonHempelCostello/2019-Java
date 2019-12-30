@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.sensors.VisionCamera;
 import frc.robot.tools.controlLoops.CubicInterpolationFollower;
 import frc.robot.tools.pathTools.Odometry;
+
 import frc.robot.tools.pathTools.PathList;
 
 /**
@@ -101,7 +102,7 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    RobotMap.drive.startAutoOdometry(0,4,0, true);
+    RobotMap.drive.startAutoOdometry(0,0,0, false);
     robotConfig.setAutoConfig();
     commandSuites.startAutoCommands();
     if (m_autonomousCommand != null) {
@@ -138,7 +139,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-
 
     Scheduler.getInstance().run();
   }
