@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.tools.controlLoops;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -247,8 +248,14 @@ public class PurePursuitController extends Command {
 			v = -v;
 		}
 		else{
-			c = -c;
+			c = c;
 		}
+		if(useOutsideOdometry){
+			if(odometryDirection!= chosenPath.getReversed()){
+				c = -c;
+			}
+		}
+
 		leftVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
 		rightVelocity = v*(2-(c*RobotStats.robotBaseDistance))/2;
 

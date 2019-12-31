@@ -120,25 +120,36 @@ public class Odometry extends Command {
   @Override
   protected void execute() {
     if(shouldRun){
-      leftSideNext = leftDriveEncoder.getDistance();
-      rightSideNext = rightDriveEncoder.getDistance();
-      thetaNext = navx.currentAngle()+thetaOffset;
-      leftDelta = (leftSideNext-leftSide);
-      rightDelta = (rightSideNext-rightSide);
-      centerDelta = (leftDelta+rightDelta)/2;
       if(isReversed){
+        leftSideNext = leftDriveEncoder.getDistance();
+        rightSideNext = rightDriveEncoder.getDistance();
+        thetaNext = navx.currentAngle()+thetaOffset;
+        leftDelta = (leftSideNext-leftSide);
+        rightDelta = (rightSideNext-rightSide);
+        centerDelta = (leftDelta+rightDelta)/2;
         yNext = y-centerDelta*Math.sin(Math.toRadians(thetaNext));
         xNext = x-centerDelta*Math.cos(Math.toRadians(thetaNext));
+        x = xNext;
+        y = yNext;
+        theta = thetaNext;
+        leftSide = leftSideNext;
+        rightSide = rightSideNext;
       }
       else{
+        leftSideNext = leftDriveEncoder.getDistance();
+        rightSideNext = rightDriveEncoder.getDistance();
+        thetaNext = navx.currentAngle()+thetaOffset;
+        leftDelta = (leftSideNext-leftSide);
+        rightDelta = (rightSideNext-rightSide);
+        centerDelta = (leftDelta+rightDelta)/2;
         xNext = x+centerDelta*Math.cos(Math.toRadians(thetaNext));
         yNext = y+centerDelta*Math.sin(Math.toRadians(thetaNext));
+        x = xNext;
+        y = yNext;
+        theta = thetaNext;
+        leftSide = leftSideNext;
+        rightSide = rightSideNext;
       }
-      x = xNext;
-      y = yNext;
-      theta = thetaNext;
-      leftSide = leftSideNext;
-      rightSide = rightSideNext;
       
     }
    

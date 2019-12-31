@@ -10,23 +10,27 @@ package frc.robot.tools.pathTools;
 import java.io.File;
 
 public class PathList {
-  private File multiHatchAutoFile1 = new File("/home/lvuser/deploy/2HatchAuto1.pf1.csv");
-  private File multiHatchAutoFile2 = new File("/home/lvuser/deploy/2HatchAuto2.pf1.csv");
-  private File multiHatchAutoFile3 = new File("/home/lvuser/deploy/2HatchAuto3.pf1.csv");
   private File demoAutoFile1 = new File("/home/lvuser/deploy/demoAuto.pf1.csv");
+  private File demoAutoFile2 = new File("/home/lvuser/deploy/demoAuto2.pf1.csv");
+  private File demoAutoFile3 = new File("/home/lvuser/deploy/demoAuto3.pf1.csv");
+
 
 
   public PathSetup multiHatchAutoPath1;
   public PathSetup multiHatchAutoPath2;
   public PathSetup multiHatchAutoPath3;
   public PathSetup demoAuto1;
+  public PathSetup demoAuto2;
+  public PathSetup demoAuto3;
+
 
 
   public PathList() {
-    multiHatchAutoPath1 = new PathSetup(multiHatchAutoFile1, true);
-    multiHatchAutoPath2 = new PathSetup(multiHatchAutoFile2, true);
-    multiHatchAutoPath3 = new PathSetup(multiHatchAutoFile3, false);
     demoAuto1 = new PathSetup(demoAutoFile1, false);
+    demoAuto2 = new PathSetup(demoAutoFile2, true);
+    demoAuto3 = new PathSetup(demoAutoFile3, false);
+
+
 
 
 

@@ -10,13 +10,17 @@ package frc.robot.commands.autos;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
 import frc.robot.tools.controlLoops.PurePursuitController;
-import frc.robot.tools.pathTools.PathList;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class DemoAuto extends CommandGroup {
   /**
    * Add your docs here.
    */
   public DemoAuto() {
-    addSequential(new PurePursuitController(Robot.pathlist.demoAuto1,0.8,5.0,true,false));
+    addSequential(new PurePursuitController(Robot.pathlist.demoAuto1,1.2,3.8,true,false));
+    addSequential(new PurePursuitController(Robot.pathlist.demoAuto2,1.2,3.8,true,false));
+    addSequential(new PurePursuitController(Robot.pathlist.demoAuto3,2,3.8,true,false));
+
+
   }
 }

@@ -8,7 +8,6 @@
 package frc.robot;
 
 import frc.robot.commands.autos.DemoAuto;
-import frc.robot.commands.autos.MultiHatchAuto;;
 import frc.robot.commands.humanInterface.ArmInterface;
 import frc.robot.commands.humanInterface.DriveInterface;
 import frc.robot.tools.controlLoops.CubicInterpolationFollower;
@@ -20,7 +19,6 @@ import frc.robot.tools.controlLoops.VelocityPID;
 public class CommandSuites {
     private DriveInterface driveInterface;
     private ArmInterface armInterface;
-    private MultiHatchAuto basicTestAuto;
     private CubicInterpolationFollower cubicFollower;
     private DemoAuto demoAuto;
     public CommandSuites(){
