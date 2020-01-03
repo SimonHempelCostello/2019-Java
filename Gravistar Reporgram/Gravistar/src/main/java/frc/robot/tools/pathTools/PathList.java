@@ -10,8 +10,7 @@ package frc.robot.tools.pathTools;
 import java.io.File;
 
 public class PathList {
-  private File demoAutoFile1 = new File("/home/lvuser/deploy/demoAuto.pf1.csv");
-  private File demoAutoFile2 = new File("/home/lvuser/deploy/demoAuto2.pf1.csv");
+  private File demoAutoFile2 = new File("/home/lvuser/deploy/demoAuto4.pf1.csv");
   private File demoAutoFile3 = new File("/home/lvuser/deploy/demoAuto3.pf1.csv");
 
 
@@ -26,9 +25,8 @@ public class PathList {
 
 
   public PathList() {
-    demoAuto1 = new PathSetup(demoAutoFile1, false);
-    demoAuto2 = new PathSetup(demoAutoFile2, true);
     demoAuto3 = new PathSetup(demoAutoFile3, false);
+    demoAuto2 = new PathSetup(demoAutoFile2, true);
 
 
 

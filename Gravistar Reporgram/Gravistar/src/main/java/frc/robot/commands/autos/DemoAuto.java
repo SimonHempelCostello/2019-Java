@@ -17,9 +17,8 @@ public class DemoAuto extends CommandGroup {
    * Add your docs here.
    */
   public DemoAuto() {
-    addSequential(new PurePursuitController(Robot.pathlist.demoAuto1,1.2,3.8,true,false));
-    addSequential(new PurePursuitController(Robot.pathlist.demoAuto2,1.2,3.8,true,false));
-    addSequential(new PurePursuitController(Robot.pathlist.demoAuto3,2,3.8,true,false));
+    addSequential(new PurePursuitController(Robot.pathlist.demoAuto2,2,3.8,true,true));
+    addSequential(new PurePursuitController(Robot.pathlist.demoAuto3,2,3.8,true,true));
 
 
   }

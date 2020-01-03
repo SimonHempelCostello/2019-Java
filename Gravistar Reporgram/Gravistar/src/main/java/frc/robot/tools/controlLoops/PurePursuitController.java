@@ -246,14 +246,10 @@ public class PurePursuitController extends Command {
 		double c = curvature;
 		if(chosenPath.getReversed()){
 			v = -v;
+			c=c;
 		}
 		else{
-			c = c;
-		}
-		if(useOutsideOdometry){
-			if(odometryDirection!= chosenPath.getReversed()){
-				c = -c;
-			}
+			c = -c;
 		}
 
 		leftVelocity = v*(2+(c*RobotStats.robotBaseDistance))/2;
