@@ -29,9 +29,9 @@ import frc.robot.tools.pathTools.Odometry;
  * Add your docs here.
  */
 public class DriveTrain extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-  private double deadZone = 0.00;
+	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
+	private double deadZone = 0.00;
 	private double turn =0;
 	private double throttel = 0;
 	private double povValue;
@@ -39,19 +39,19 @@ public class DriveTrain extends Subsystem {
 	private double sensitivity;
 	private double minTurnFactor = 0.4;
 	CubicInterpolationFollower cubicInterpolationFollower = new CubicInterpolationFollower(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,true);
-  public static DriveEncoder leftMainDrive = new DriveEncoder(RobotMap.leftDriveLead,RobotMap.leftDriveLead.getSelectedSensorPosition(0));
+	public static DriveEncoder leftMainDrive = new DriveEncoder(RobotMap.leftDriveLead,RobotMap.leftDriveLead.getSelectedSensorPosition(0));
 	public static DriveEncoder rightMainDrive = new DriveEncoder(RobotMap.rightDriveLead,RobotMap.rightDriveLead.getSelectedSensorPosition(0));
 	private double speed;
-  private double f = 0.332;
+	private double f = 0.332;
 	private double p = 0.165;
-  private double i = 0.000001;
-  private double d = 0;
+	private double i = 0.00000;
+	private double d = 0;
 	private int profile = 0;
 	private Odometry autoOdometry;
 	private PID alignmentPID;
-	private double alignmentP = 0.011;
-	private double alignmenti= 0.000;
-	private double alignmentd;
+	private double alignmentP = 0.2;
+	private double alignmenti= 0.004;
+	private double alignmentd = 1; 
 	private double power;
 	private boolean connected;
 	private double distance;
@@ -116,13 +116,37 @@ public class DriveTrain extends Subsystem {
 	}
 	public void initAlignmentPID(){
 		alignmentPID = new PID(alignmentP, alignmenti, alignmentd);
-		alignmentPID.setMaxOutput(0.4);
-		alignmentPID.setMinOutput(-0.4);
-    alignmentPID.setSetPoint(0);
+		alignmentPID.setMaxOutput(7);
+		alignmentPID.setMinOutput(-7);
+    	alignmentPID.setSetPoint(0);
 	}
-  public void setHighGear(){
-    RobotMap.shifters.set(RobotMap.highGear);
-  }
+	public boolean trackVisionTape(){
+		RobotMap.drive.setLowGear();
+		Robot.visionCamera.updateVision();
+		if(Timer.getFPGATimestamp()-Robot.visionCamera.lastParseTime>0.25){
+			alignmentPID.updatePID(0);
+		}
+		else{
+			alignmentPID.updatePID(Robot.visionCamera.getAngle());
+		}
+			
+		power = 0.0;
+		System.out.println(alignmentPID.getResult());
+		RobotMap.drive.setLowGear();
+		RobotConfig.setDriveMotorsBrake();
+		setLeftSpeed(alignmentPID.getResult());
+		setRightSpeed(-alignmentPID.getResult());
+		if(Robot.visionCamera.getAngle()<1){
+			return true;
+		}
+		else{
+			return false;
+		}
+		
+	}
+	public void setHighGear(){
+		RobotMap.shifters.set(RobotMap.highGear);
+	}
 	public void arcadeDrive(){
 		double leftPower;
 		double rightPower;
@@ -167,36 +191,6 @@ public class DriveTrain extends Subsystem {
 		}
 		else if(RobotMap.shifters.get() == RobotMap.lowGear) {
 				sensitivity =1;
-		}
-	}
-	public boolean trackVisionTape(){
-    RobotMap.drive.setLowGear();
-		Robot.visionCamera.updateVision();
-		if(Timer.getFPGATimestamp()-Robot.visionCamera.lastParseTime>0.25){
-			alignmentPID.updatePID(0);
-		}
-		else{
-			alignmentPID.updatePID(Robot.visionCamera.getAngle());
-		}
-		
-    power = 0.0;
-    RobotMap.drive.setLowGear();
-    RobotConfig.setDriveMotorsBrake();
-    connected = RobotMap.mainUltrasonicSensor2.isConnected();
-    distance = RobotMap.mainUltrasonicSensor2.getDistance();
-    if(distance>=1.5&&connected&&distance<7){
-      power = Math.pow(distance/15,0.8);
-    }
-    else if(distance<1.5&&connected){
-			power = 0.0;
-    }
-		RobotMap.leftDriveLead.set(ControlMode.PercentOutput, -power+ alignmentPID.getResult());
-		RobotMap.rightDriveLead.set(ControlMode.PercentOutput, -power- alignmentPID.getResult());
-		if(ButtonMap.autoBreakTapeTracking()&&RobotState.isAutonomous()){
-			return true;
-		}
-		else{
-			return false;
 		}
 	}
 	public void pathToVisionTarget(){

@@ -46,6 +46,8 @@ dependencies {
     implementation wpi.deps.wpilib()
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+    compile 'gov.nist.math:jama:1.0.3'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
 
 
     implementation wpi.deps.vendor.java()

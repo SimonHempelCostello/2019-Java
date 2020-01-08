@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
   private RobotConfig robotConfig;
   public static VisionCamera visionCamera;
   public static SerialPort serialPort1 = new SerialPort(115200, Port.kUSB);
+  
 
   /**
    * This function is run when the robot is first started up and should be
@@ -65,6 +66,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    visionCamera.updateVision();
+    SmartDashboard.putString("visionCameradata", visionCamera.getString());
 
   }
   /**
